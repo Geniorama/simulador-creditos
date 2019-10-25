@@ -94,26 +94,15 @@ class Simulator {
         
         let interes = ((this.monto * this.tasa) / 30) * 30;
         interes = Math.round(interes);
-        
 
-        /*
-        Si en A1 pones Tasa (tipo de interes del periodo)
-        en B1 el nPer  (número de Periodos)
-        en C1 el Va  (Capital inicial)
-
-        Esta fórmula:
-        =(A1*(1+A1)^B1)*C1/(((1+A1)^B1)-1)
-        
-        var valorFuturo=parseFloat(this.valor)*Math.pow(1+parseFloat(this.tasa)/100,parseInt(this.periodo));
-        */
-
-        //let k = (this.tasa*(1+this.tasa)^this.cuotas)*this.monto/(((1+this.tasa)^this.cuotas)-1);
-
-        let k = parseFloat(this.monto)*Math.pow(1+parseFloat(this.tasa)/100,parseInt(this.cuotas));
-
+        let k = this.monto*(this.tasa/(Math.pow(1+this.tasa, this.cuotas)-1));
         k = Math.round(k);
 
-        return k;
+        let seguro = (this.monto * this.seguro) / 100;
+
+        let res = k + interes;
+
+        return interes;
         
     }
 }
