@@ -102,7 +102,17 @@ class Simulator {
 
         let res = k + interes;
 
-        return interes;
+        var valores ={
+            
+            mesUno: {
+                interes : interes,
+                k       : k,
+                seguro  : seguro,
+                total   : res
+            }
+        };
+
+        return valores;
         
     }
 }
@@ -121,8 +131,30 @@ formulario.addEventListener('submit', function(e) {
    
     const simulacion = new Simulator(monto, cuotas, fecha, modo, programa);
 
+    const valores = simulacion.calcular();
     
-    console.log(simulacion.calcular());
-    
+    const cont_res = document.querySelector('#res');
 
+    console.log(valores.mesUno.total);
+
+    cont_res.innerHTML = `
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Fecha</th>
+            <th scope="col">Saldo</th>
+            <th scope="col">Int</th>
+            <th scope="col">Total</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>${fecha}</td>
+            <td>${monto}</td>
+            <td>${valores.mesUno.interes}</td>
+            <td>${valores.mesUno.total}</td>
+        </tr>
+        </tbody>
+    </table>
+    `
 })
