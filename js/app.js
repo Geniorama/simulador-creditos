@@ -88,19 +88,35 @@ class Simulator {
         this.papeleria = 2000;
         this.iva = 19;
         this.tasa_aval = 3.7;
+        
     }
 
     calcular(){
         
-        let interes = ((this.monto * this.tasa) / 30) * 30;
+        var cuota_fija = this.monto*(this.tasa/(Math.pow(1+this.tasa, this.cuotas)-1));
+        cuota_fija = Math.round(cuota_fija);
+
+        var num_cuotas = parseInt(this.cuotas);
+
+        var per;
+            for (per = 0; per < num_cuotas; per++) {
+                var mes = per+1;
+                var saldo_inicial = this.monto;
+                var saldo_final = saldo_inicial - cuota_fija;
+                saldo_inicial = saldo_final;
+
+
+                console.log(saldo_final);
+            };
+        /*var interes = ((this.monto * this.tasa) / 30) * 30;
         interes = Math.round(interes);
 
-        let k = this.monto*(this.tasa/(Math.pow(1+this.tasa, this.cuotas)-1));
+        var k = this.monto*(this.tasa/(Math.pow(1+this.tasa, this.cuotas)-1));
         k = Math.round(k);
 
-        let seguro = (this.monto * this.seguro) / 100;
+        var seguro = (this.monto * this.seguro) / 100;
 
-        let res = k + interes;
+        var res = k + interes;
 
         var valores ={
             
@@ -111,6 +127,9 @@ class Simulator {
                 total   : res
             }
         };
+        */
+
+        var valores = cuota_fija;
 
         return valores;
         
@@ -135,8 +154,6 @@ formulario.addEventListener('submit', function(e) {
     
     const cont_res = document.querySelector('#res');
 
-    console.log(valores.mesUno.total);
-
     cont_res.innerHTML = `
     <table class="table">
         <thead>
@@ -151,8 +168,8 @@ formulario.addEventListener('submit', function(e) {
         <tr>
             <td>${fecha}</td>
             <td>${monto}</td>
-            <td>${valores.mesUno.interes}</td>
-            <td>${valores.mesUno.total}</td>
+            <td>${valores}</td>
+            <td>${valores}</td>
         </tr>
         </tbody>
     </table>
