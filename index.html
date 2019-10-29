@@ -10,7 +10,7 @@
 <body>
     <div class="container">
         <div class="row">
-            <div class="col-6">
+            <div class="col-4">
                 <div class="simulator mt-5">
                     <form action="" id="simulator" >
                         <div class="form-group">
@@ -52,6 +52,13 @@
                         </div>
 
                         <div class="form-group">
+                            <label for="ciudades">Ciudades</label>
+                            <select class="custom-select" id="ciudades" name="ciudades">
+                                <option selected>Selecciona una opción</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
                             <label for="fecha">Fecha 1ra cuota</label>
                             <input type="date" class="form-control" id="fecha" name="fecha">
                         </div>
@@ -63,8 +70,23 @@
                 </div>
             </div>
 
-            <div class="col-6">
-                <div id="res"></div>
+            <div class="col-8">
+                <div class="p-5">
+                    <table class="table">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">Fecha pago</th>
+                                <th scope="col">Intereses</th>
+                                <th scope="col">Abono al capital</th>
+                                <th scope="col">Valor cuota</th>
+                                <th scope="col">Saldo</th>
+                            </tr>
+                        </thead>
+                        <tbody id="res">
+                           
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
