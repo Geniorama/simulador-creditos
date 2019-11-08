@@ -74,22 +74,18 @@ function seleccion(calculo) {
     
 } 
 
-
-/* Función que suma o resta días a una fecha, si el parámetro
-   días es negativo restará los días*/
-
-   function sumarDias(fecha, dias){
+function sumarDias(fecha, dias){
     fecha.setDate(fecha.getDate() + dias);
     return fecha;
-  }
+}
 
-  function sumarMeses(fecha, num_meses){
+function sumarMeses(fecha, num_meses){
     fecha.setMonth(fecha.getMonth() + num_meses);
     return fecha;
-  }
+}
 
 
-  function crearFecha(dia, mes, ano, separador) {
+function crearFecha(dia, mes, ano, separador) {
       var dia = dia.toString();
       var mes = mes.toString();
     
@@ -100,8 +96,20 @@ function seleccion(calculo) {
       var fecha = dia + separador + mes + separador + ano.toString();
       
       return fecha;
-  }
+}
 
+
+function sumaMultiple(arreglo){
+    var suma = 0;
+       for (let index = 0; index < arreglo.length; index++) {
+           var element = arreglo[index];
+
+           element = parseInt(element);
+           var suma = suma + element; 
+    }
+
+    return suma;
+}
 
 class Simulator {
     constructor(monto, cuotas, fecha, modo, programa){
@@ -114,19 +122,14 @@ class Simulator {
         this.seguro = 0.028;
         this.recaudo = 2100;
         this.papeleria = 2000;
+        this.transferencia = 5355;
         this.iva = 19;
         this.tasa_aval = 3.7;
         
     }
 
     calculate(){
-        
-        //var cuota_fija = this.monto*(this.tasa/(Math.pow(1+this.tasa, this.cuotas)-1));
-        var comision = 7510;
-        var seguro = 4655;
-        var iva = 884;
-        var iva_19 = 1427;
-        
+   
         var cuota_fija = this.monto *( (this.tasa * Math.pow(1 + this.tasa, this.cuotas)) / (Math.pow(1 + this.tasa, this.cuotas) - 1) );
         cuota_fija = Math.round(cuota_fija);
         var num_cuotas = parseInt(this.cuotas);
@@ -136,6 +139,10 @@ class Simulator {
         fecha = new Date(fecha[0], fecha[1], fecha[2]);
 
         var items = new Array();
+        var totalSeguro = new Array();
+
+        var sumaSeguro = sumaMultiple(totalSeguro);
+        var estudio = Math.round(((sumaSeguro + this.transferencia + this.recaudo * this.cuotas + this.papeleria) / this.cuotas) * this.cuotas);
         
             for (var i=0; i < num_cuotas; i++) {
                 var interes = saldo_al_capital * this.tasa;
@@ -143,6 +150,24 @@ class Simulator {
                 saldo_al_capital -= abono_al_capital;
                 var numero = i + 1;
                 var fecha_pago = sumarMeses(fecha, 1);
+                
+                var pago_seguro = (saldo_al_capital * this.seguro) / 100;
+                pago_seguro = Math.round(pago_seguro);
+                var seguro_cuota = Math.round(estudio / this.cuotas);
+                totalSeguro.push(pago_seguro);
+
+                var iva = Math.round((seguro_cuota * this.iva) / 100);
+
+                console.log ('Iva: ' + iva);
+
+                var sumaItems = cuota_fija + seguro_cuota + iva;
+
+                var comision = Math.round(((sumaItems / (1-((1*this.tasa_aval)/100)*(1+((1*this.iva)/100))))-sumaItems) / (1+((1*this.iva)/100)));
+                
+                console.log(comision);
+
+
+                
 
                 var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
 
@@ -159,14 +184,17 @@ class Simulator {
                     interes : interes, 
                     abono_al_capital : abono_al_capital, 
                     cuota_fija : cuota_fija,
-                    saldo_al_capital : saldo_al_capital
+                    saldo_al_capital : saldo_al_capital,
+                    seguro_cuota : seguro_cuota
                 };
 
                 items.push(item);
             };
 
-        return items;
         
+
+        return items;
+
     }
 }
 
@@ -199,6 +227,7 @@ formulario.addEventListener('submit', function(e) {
                 <td>${valor.abono_al_capital}</td>
                 <td>${valor.cuota_fija}</td>
                 <td>${valor.saldo_al_capital}</td>
+                <td>${valor.seguro_cuota}</td>                
             </tr>
             `;
     }
@@ -213,7 +242,7 @@ function mostrarCiudades(){
     .then(data => {
         for (const i of data) {
             
-             console.log(i);
+             //console.log(i);
         }
     })
 }
