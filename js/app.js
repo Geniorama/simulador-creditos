@@ -101,15 +101,16 @@ function crearFecha(dia, mes, ano, separador) {
 
 function sumaMultiple(arreglo){
     var suma = 0;
-       for (let index = 0; index < arreglo.length; index++) {
-           var element = arreglo[index];
 
-           element = parseInt(element);
-           var suma = suma + element; 
+    for (let numero of arreglo) {
+        numero = parseInt(numero);
+
+        suma = suma + numero;
     }
 
     return suma;
 }
+
 
 class Simulator {
     constructor(monto, cuotas, fecha, modo, programa){
@@ -139,59 +140,53 @@ class Simulator {
         fecha = new Date(fecha[0], fecha[1], fecha[2]);
 
         var items = new Array();
-        var totalSeguro = new Array();
-
+        var totalSeguro = [];
+        console.log(totalSeguro);
         var sumaSeguro = sumaMultiple(totalSeguro);
         var estudio = Math.round(((sumaSeguro + this.transferencia + this.recaudo * this.cuotas + this.papeleria) / this.cuotas) * this.cuotas);
-        
+        var seguro_cuota = Math.round(estudio / this.cuotas);
+
             for (var i=0; i < num_cuotas; i++) {
-                var interes = saldo_al_capital * this.tasa;
-                var abono_al_capital = cuota_fija - interes;
-                saldo_al_capital -= abono_al_capital;
+                var interes = Math.round(saldo_al_capital * this.tasa);
+                var abono_al_capital = Math.round(cuota_fija - interes);
+                
+                saldo_al_capital -= Math.round(abono_al_capital);
+
+                var saldo_total = saldo_al_capital + abono_al_capital;
+
                 var numero = i + 1;
                 var fecha_pago = sumarMeses(fecha, 1);
                 
-                var pago_seguro = (saldo_al_capital * this.seguro) / 100;
-                pago_seguro = Math.round(pago_seguro);
-                var seguro_cuota = Math.round(estudio / this.cuotas);
+                var pago_seguro = Math.round((saldo_total * this.seguro) / 100);
                 totalSeguro.push(pago_seguro);
-
+                
+                
                 var iva = Math.round((seguro_cuota * this.iva) / 100);
 
-                console.log ('Iva: ' + iva);
-
+                //Operación comisión
                 var sumaItems = cuota_fija + seguro_cuota + iva;
-
                 var comision = Math.round(((sumaItems / (1-((1*this.tasa_aval)/100)*(1+((1*this.iva)/100))))-sumaItems) / (1+((1*this.iva)/100)));
                 
-                console.log(comision);
-
-
-                
+                var iva_19 = Math.round((comision*this.iva)/100);
 
                 var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
 
                 fecha_pago = crearFecha(fecha_pago.getDate(), meses[fecha_pago.getMonth()], fecha_pago.getFullYear(), ' - ');
-                
-               
-                interes = Math.round(interes);
-                abono_al_capital = Math.round(abono_al_capital);
-                saldo_al_capital = Math.round(saldo_al_capital);
+
+                var total_cuota = cuota_fija + comision + iva_19 + seguro_cuota + iva;
 
                 var item = {
                     fecha_pago : fecha_pago,
                     numero : numero, 
                     interes : interes, 
                     abono_al_capital : abono_al_capital, 
-                    cuota_fija : cuota_fija,
-                    saldo_al_capital : saldo_al_capital,
+                    cuota_fija : total_cuota,
+                    saldo_al_capital : saldo_total,
                     seguro_cuota : seguro_cuota
                 };
 
                 items.push(item);
             };
-
-        
 
         return items;
 
@@ -226,8 +221,8 @@ formulario.addEventListener('submit', function(e) {
                 <td>${valor.interes}</td>
                 <td>${valor.abono_al_capital}</td>
                 <td>${valor.cuota_fija}</td>
-                <td>${valor.saldo_al_capital}</td>
-                <td>${valor.seguro_cuota}</td>                
+                <td>${valor.seguro_cuota}</td> 
+                <td>${valor.saldo_al_capital}</td>               
             </tr>
             `;
     }
