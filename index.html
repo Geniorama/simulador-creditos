@@ -52,13 +52,6 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="ciudades">Ciudades</label>
-                            <select class="custom-select" id="ciudades" name="ciudades">
-                                <option selected>Selecciona una opción</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
                             <label for="fecha">Fecha 1ra cuota</label>
                             <input type="date" class="form-control" id="fecha" name="fecha">
                         </div>
@@ -72,15 +65,15 @@
 
             <div class="col-8">
                 <div class="p-5">
-                    <table class="table">
+                    <table class="table d-none" id="tabla-res">
                         <thead class="thead-dark">
                             <tr>
                                 <th scope="col">Fecha pago</th>
+                                <th scope="col">Saldo</th>
                                 <th scope="col">Intereses</th>
                                 <th scope="col">Abono al capital</th>
-                                <th scope="col">Valor cuota</th>
                                 <th scope="col">Seguro</th>
-                                <th scope="col">Saldo</th>
+                                <th scope="col">Valor cuota</th> 
                             </tr>
                         </thead>
                         <tbody id="res">

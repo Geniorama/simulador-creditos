@@ -1,78 +1,11 @@
+/*============== VARIABLES GLOBALES ===================*/
+
 var formulario = document.querySelector('#simulator');
 var contenedor = document.querySelector('#variable-content');
 var cont_cuotas = document.getElementById('cuotas');
 
-function seleccion(calculo) {
 
-    if (calculo == 'programa') {
-        var valor =  document.querySelector('#tipo-programa').value;
-
-        if (valor == 1) {
-            valor = 'Pregrado';
-    
-            cont_cuotas.innerHTML = `
-                <option selected>Selecciona una opción</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-            `;
-    
-        } else {
-            valor = 'Postgrado';
-            cont_cuotas.innerHTML = `
-                <option selected>Selecciona una opción</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
-                <option value="10">10</option>
-                <option value="11">11</option>
-                <option value="12">12</option>
-            `;
-        }
-
-    } else if (calculo == 'modo_pago'){
-        var modo = document.getElementById('modo-pago').value;
-
-        if (modo == 2) {
-            contenedor.innerHTML = `
-            <div class="form-group">
-                <label for="nombre-banco">Nombre banco</label>
-                <select class="custom-select" id="nombre-banco" name="nombre-banco">
-                    <option selected>Selecciona una opción</option>
-                    <option value="1">Banco de Bogotá</option>
-                    <option value="2">Av. Villas</option>
-                    <option value="3">Banco de Occidente</option>
-                    <option value="4">Banco Popular</option>
-                    <option value="5">BBVA</option>
-                    <option value="6">6</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="numero-cuenta">Número cuenta</label>
-                <input type="text" id="numero-cuenta" name="numero-cuenta" class="form-control">
-            </div>
-
-            <div class="form-group">
-                <label for="numero-cheque">Número de cheque</label>
-                <input type="text" id="numero-cheque" name="numero-cheque" class="form-control">
-            </div>
-            `
-        } else {
-            contenedor.innerHTML = '';
-        }
-    }
-    
-} 
+/*============== FUNCIONES AUXILIARES ===================*/
 
 function sumarDias(fecha, dias){
     fecha.setDate(fecha.getDate() + dias);
@@ -112,6 +45,53 @@ function sumaMultiple(arreglo){
 }
 
 
+/*============== FUNCIONES FORMULARIO ===================*/
+
+function seleccion(calculo) {
+
+    //Tipo programa
+    if (calculo == 'programa') {
+        var valor =  document.querySelector('#tipo-programa').value;
+        //Pregrado
+        if (valor == 1) {
+            valor = 'Pregrado';
+    
+            cont_cuotas.innerHTML = `
+                <option selected>Selecciona una opción</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+            `;
+    
+        } else {
+            //Postgrado
+            valor = 'Postgrado';
+            cont_cuotas.innerHTML = `
+                <option selected>Selecciona una opción</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+            `;
+        }
+
+    }   
+} 
+
+
+//Simulador
+
 class Simulator {
     constructor(monto, cuotas, fecha, modo, programa){
         this.monto = monto;
@@ -140,40 +120,37 @@ class Simulator {
         fecha = new Date(fecha[0], fecha[1], fecha[2]);
 
         var items = new Array();
-        var totalSeguro = [];
+        let totalSeguro = [];
         console.log(totalSeguro);
         var sumaSeguro = sumaMultiple(totalSeguro);
         var estudio = Math.round(((sumaSeguro + this.transferencia + this.recaudo * this.cuotas + this.papeleria) / this.cuotas) * this.cuotas);
         var seguro_cuota = Math.round(estudio / this.cuotas);
 
             for (var i=0; i < num_cuotas; i++) {
+                var numero = i + 1;
                 var interes = Math.round(saldo_al_capital * this.tasa);
                 var abono_al_capital = Math.round(cuota_fija - interes);
                 
                 saldo_al_capital -= Math.round(abono_al_capital);
-
                 var saldo_total = saldo_al_capital + abono_al_capital;
 
-                var numero = i + 1;
-                var fecha_pago = sumarMeses(fecha, 1);
+                
+                let fecha_pago = sumarMeses(fecha, 1);
+                var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+                fecha_pago = crearFecha(fecha_pago.getDate(), meses[fecha_pago.getMonth()], fecha_pago.getFullYear(), ' - ');
                 
                 var pago_seguro = Math.round((saldo_total * this.seguro) / 100);
                 totalSeguro.push(pago_seguro);
                 
-                
                 var iva = Math.round((seguro_cuota * this.iva) / 100);
 
                 //Operación comisión
-                var sumaItems = cuota_fija + seguro_cuota + iva;
+                let sumaItems = cuota_fija + seguro_cuota + iva;
                 var comision = Math.round(((sumaItems / (1-((1*this.tasa_aval)/100)*(1+((1*this.iva)/100))))-sumaItems) / (1+((1*this.iva)/100)));
-                
                 var iva_19 = Math.round((comision*this.iva)/100);
 
-                var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
-
-                fecha_pago = crearFecha(fecha_pago.getDate(), meses[fecha_pago.getMonth()], fecha_pago.getFullYear(), ' - ');
-
-                var total_cuota = cuota_fija + comision + iva_19 + seguro_cuota + iva;
+                let itemsCuota = [cuota_fija, comision, iva_19, seguro_cuota, iva];
+                var total_cuota = sumaMultiple(itemsCuota);
 
                 var item = {
                     fecha_pago : fecha_pago,
@@ -188,6 +165,7 @@ class Simulator {
                 items.push(item);
             };
 
+            
         return items;
 
     }
@@ -211,6 +189,10 @@ formulario.addEventListener('submit', function(e) {
     
     const cont_res = document.querySelector('#res');
 
+    const tabla_res = document.querySelector('#tabla-res');
+
+    tabla_res.classList.remove('d-none');
+
     cont_res.innerHTML = '';
     
     for (const valor of valores) {
@@ -218,30 +200,13 @@ formulario.addEventListener('submit', function(e) {
             cont_res.innerHTML += `
             <tr>
                 <td>${valor.fecha_pago}</td>
+                <td>${valor.saldo_al_capital}</td> 
                 <td>${valor.interes}</td>
                 <td>${valor.abono_al_capital}</td>
-                <td>${valor.cuota_fija}</td>
                 <td>${valor.seguro_cuota}</td> 
-                <td>${valor.saldo_al_capital}</td>               
+                <td>${valor.cuota_fija}</td>              
             </tr>
             `;
     }
 
 })
-
-var cont_ciudades = document.querySelector('#ciudades');
-//cont_ciudades = '';
-function mostrarCiudades(){
-    fetch('../colombia.json')
-    .then(res => res.json())
-    .then(data => {
-        for (const i of data) {
-            
-             //console.log(i);
-        }
-    })
-}
-
-mostrarCiudades();
-
-//<td>${valor.fecha_pago.getDay().toString() + "-" + valor.fecha_pago.getMonth().toString() + "-" + valor.fecha_pago.getFullYear().toString()}</td>
