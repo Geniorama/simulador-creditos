@@ -45,6 +45,7 @@ function sumaMultiple(arreglo){
 }
 
 
+
 /*============== FUNCIONES FORMULARIO ===================*/
 
 function seleccion(calculo) {
@@ -120,11 +121,8 @@ class Simulator {
         fecha = new Date(fecha[0], fecha[1], fecha[2]);
 
         var items = new Array();
-        let totalSeguro = [];
-        console.log(totalSeguro);
-        var sumaSeguro = sumaMultiple(totalSeguro);
-        var estudio = Math.round(((sumaSeguro + this.transferencia + this.recaudo * this.cuotas + this.papeleria) / this.cuotas) * this.cuotas);
-        var seguro_cuota = Math.round(estudio / this.cuotas);
+
+        var pago_total_seguro = new Array();
 
             for (var i=0; i < num_cuotas; i++) {
                 var numero = i + 1;
@@ -134,13 +132,17 @@ class Simulator {
                 saldo_al_capital -= Math.round(abono_al_capital);
                 var saldo_total = saldo_al_capital + abono_al_capital;
 
-                
-                let fecha_pago = sumarMeses(fecha, 1);
-                var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
-                fecha_pago = crearFecha(fecha_pago.getDate(), meses[fecha_pago.getMonth()], fecha_pago.getFullYear(), ' - ');
+                var meses = new Array ("Ene.","Feb.","Mar.","Abr.","May.","Jun.","Jul.","Ago.","Sept.","Oct.","Nov.","Dic.");
+                let fecha_pagos = crearFecha(fecha.getDate(), meses[fecha.getMonth()], fecha.getFullYear(), ' - ');
+                sumarMeses(fecha, 1);
                 
                 var pago_seguro = Math.round((saldo_total * this.seguro) / 100);
-                totalSeguro.push(pago_seguro);
+                pago_total_seguro.push(pago_seguro);
+
+                
+
+                var estudio = Math.round(((309 + this.transferencia + this.recaudo * this.cuotas + this.papeleria) / this.cuotas) * this.cuotas);
+                var seguro_cuota = Math.round(estudio / this.cuotas);
                 
                 var iva = Math.round((seguro_cuota * this.iva) / 100);
 
@@ -153,7 +155,7 @@ class Simulator {
                 var total_cuota = sumaMultiple(itemsCuota);
 
                 var item = {
-                    fecha_pago : fecha_pago,
+                    fecha_pago : fecha_pagos,
                     numero : numero, 
                     interes : interes, 
                     abono_al_capital : abono_al_capital, 
@@ -162,10 +164,9 @@ class Simulator {
                     seguro_cuota : seguro_cuota
                 };
 
+                
                 items.push(item);
             };
-
-            
         return items;
 
     }
