@@ -1,8 +1,10 @@
 /*============== VARIABLES GLOBALES ===================*/
 
-var formulario = document.querySelector('#simulator');
-var contenedor = document.querySelector('#variable-content');
-var cont_cuotas = document.getElementById('cuotas');
+const formulario = document.querySelector('#simulator');
+const contenedor = document.querySelector('#variable-content');
+const cont_cuotas = document.getElementById('cuotas');
+const cont_res = document.querySelector('#res');
+const tabla_res = document.querySelector('#tabla-res');
 
 
 /*============== FUNCIONES AUXILIARES ===================*/
@@ -37,7 +39,6 @@ function sumaMultiple(arreglo){
 
     for (let numero of arreglo) {
         numero = parseInt(numero);
-
         suma = suma + numero;
     }
 
@@ -48,65 +49,56 @@ function sumaMultiple(arreglo){
 
 /*============== FUNCIONES FORMULARIO ===================*/
 
-function seleccion(calculo) {
+const tipo_programa = document.querySelector('#tipo-programa')
 
-    //Tipo programa
-    if (calculo == 'programa') {
-        var valor =  document.querySelector('#tipo-programa').value;
+tipo_programa.addEventListener('change', function() {
+
+    let valor_programa = this.value
+
         //Pregrado
-        if (valor == 1) {
+        if (valor_programa == 1) {
             valor = 'Pregrado';
+            const num_opciones = 6;
+            let element = '<option selected>Selecciona una opción</option>';
+            
+            for (let index = 0; index < num_opciones; index++) {
+                let num_opcion = index + 1
+                element += `<option value=${num_opcion}>${num_opcion}</option>`
+            }
+            cont_cuotas.innerHTML = element;
     
-            cont_cuotas.innerHTML = `
-                <option selected>Selecciona una opción</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-            `;
-    
-        } else {
+        } else if (valor_programa == 2) {
             //Postgrado
             valor = 'Postgrado';
-            cont_cuotas.innerHTML = `
-                <option selected>Selecciona una opción</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
-                <option value="10">10</option>
-                <option value="11">11</option>
-                <option value="12">12</option>
-            `;
-        }
-
-    }   
-} 
+            const num_opciones = 12;
+            let element = '<option selected>Selecciona una opción</option>';
+            
+            for (let index = 0; index < num_opciones; index++) {
+                let num_opcion = index + 1
+                element += `<option value=${num_opcion}>${num_opcion}</option>`
+            }
+            cont_cuotas.innerHTML = element;
+        }   
+    
+})
 
 
 //Simulador
 
 class Simulator {
-    constructor(monto, cuotas, fecha, modo, programa){
+    constructor(monto, cuotas, fecha, modo, programa, tasa, seguro, recaudo, papeleria, transferencia, iva, tasa_aval){
         this.monto = monto;
         this.cuotas = cuotas;
         this.fecha = fecha;
         this.modo = modo;
         this.programa = programa;
-        this.tasa = 0.014;
-        this.seguro = 0.028;
-        this.recaudo = 2100;
-        this.papeleria = 2000;
-        this.transferencia = 5355;
-        this.iva = 19;
-        this.tasa_aval = 3.7;
+        this.tasa = tasa;
+        this.seguro = seguro;
+        this.recaudo = recaudo;
+        this.papeleria = papeleria;
+        this.transferencia = transferencia;
+        this.iva = iva;
+        this.tasa_aval = tasa_aval;
         
     }
 
@@ -139,8 +131,6 @@ class Simulator {
                 sumarMeses(fecha, 1);
                 
                 var pago_seguro = Math.round((saldo_total * this.seguro) / 100);
-
-                //NECESITO REEMPLAZAR ESE suma_total_pago_seguro POR LA SUMA TOTAL DE CADA pago_seguro.
 
                 var suma_total_pago_seguro = 0
 
@@ -182,19 +172,22 @@ formulario.addEventListener('submit', function(e) {
 
     datos = new FormData(formulario);
 
-    monto =  parseInt(datos.get('valor'));
-    cuotas =  parseInt(datos.get('cuotas'));
-    fecha = datos.get('fecha');
-    modo = datos.get('modo-pago');
-    programa = datos.get('tipo-programa');
+    const monto =  parseInt(datos.get('valor'));
+    const cuotas =  parseInt(datos.get('cuotas'));
+    const fecha = datos.get('fecha');
+    const modo = datos.get('modo-pago');
+    const programa = datos.get('tipo-programa');
+    const tasa = 0.014;
+    const seguro = 0.028;
+    const recaudo = 2100;
+    const papeleria = 2000;
+    const transferencia = 5355;
+    const iva = 19;
+    const tasa_aval = 3.7;
    
-    const simulacion = new Simulator(monto, cuotas, fecha, modo, programa);
+    const simulacion = new Simulator(monto, cuotas, fecha, modo, programa, tasa, seguro, recaudo, papeleria, transferencia, iva, tasa_aval);
 
     const valores = simulacion.calculate();
-    
-    const cont_res = document.querySelector('#res');
-
-    const tabla_res = document.querySelector('#tabla-res');
 
     tabla_res.classList.remove('d-none');
 
