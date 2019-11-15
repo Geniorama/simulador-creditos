@@ -103,49 +103,53 @@ class Simulator {
     }
 
     calculate(){
+        var meses = new Array ("Ene.","Feb.","Mar.","Abr.","May.","Jun.","Jul.","Ago.","Sept.","Oct.","Nov.","Dic.");
    
-        var cuota_fija = this.monto *( (this.tasa * Math.pow(1 + this.tasa, this.cuotas)) / (Math.pow(1 + this.tasa, this.cuotas) - 1) );
-        cuota_fija = Math.round(cuota_fija);
-        var num_cuotas = parseInt(this.cuotas);
+        var numero = 0
+        var cuota_fija = Math.round(this.monto *( (this.tasa * Math.pow(1 + this.tasa, this.cuotas)) / (Math.pow(1 + this.tasa, this.cuotas) - 1) ));
+        var interes = 0
+        var num_cuotas = this.cuotas;
+        var abono_al_capital = 0
         var saldo_al_capital = this.monto;
         var fecha = this.fecha;
         var fecha = fecha.split('-');
         fecha = new Date(fecha[0], fecha[1], fecha[2]);
+        var suma_total_pago_seguro = 0
+        var estudio = Math.round(((suma_total_pago_seguro + this.transferencia + this.recaudo * this.cuotas + this.papeleria) / this.cuotas) * this.cuotas);
+        var saldo_total = 0
+        var fecha_pagos = ''
+        var pago_seguro = 0
+        var seguro_cuota = Math.round(estudio / this.cuotas);
+        var iva = Math.round((seguro_cuota * this.iva) / 100);
+        var comision = 0;
+        var iva_19 = 0;
+        var total_cuota = 0;
 
+        
         var items = new Array();
 
-        var resultado_suma = 0;
-
-        console.log(resultado_suma);
-
             for (var i=0; i < num_cuotas; i++) {
-                var numero = i + 1;
-                var interes = Math.round(saldo_al_capital * this.tasa);
-                var abono_al_capital = Math.round(cuota_fija - interes);
-                
+                numero = i + 1;
+                interes = Math.round(saldo_al_capital * this.tasa);
+                abono_al_capital = Math.round(cuota_fija - interes);
                 saldo_al_capital -= Math.round(abono_al_capital);
-                var saldo_total = saldo_al_capital + abono_al_capital;
-
-                var meses = new Array ("Ene.","Feb.","Mar.","Abr.","May.","Jun.","Jul.","Ago.","Sept.","Oct.","Nov.","Dic.");
-                let fecha_pagos = crearFecha(fecha.getDate(), meses[fecha.getMonth()], fecha.getFullYear(), ' - ');
+                saldo_total = saldo_al_capital + abono_al_capital;
+                
+                fecha_pagos = crearFecha(fecha.getDate(), meses[fecha.getMonth()], fecha.getFullYear(), ' - ');
                 sumarMeses(fecha, 1);
                 
-                var pago_seguro = Math.round((saldo_total * this.seguro) / 100);
+                pago_seguro = Math.round((saldo_total * this.seguro) / 100);
 
-                var suma_total_pago_seguro = 0
-
-                var estudio = Math.round(((suma_total_pago_seguro + this.transferencia + this.recaudo * this.cuotas + this.papeleria) / this.cuotas) * this.cuotas);
-                var seguro_cuota = Math.round(estudio / this.cuotas);
+                suma_total_pago_seguro = suma_total_pago_seguro + pago_seguro
                 
-                var iva = Math.round((seguro_cuota * this.iva) / 100);
+                console.log(suma_total_pago_seguro)
 
                 //Operación comisión
-                let sumaItems = cuota_fija + seguro_cuota + iva;
-                var comision = Math.round(((sumaItems / (1-((1*this.tasa_aval)/100)*(1+((1*this.iva)/100))))-sumaItems) / (1+((1*this.iva)/100)));
-                var iva_19 = Math.round((comision*this.iva)/100);
+                comision = Math.round((((cuota_fija + seguro_cuota + iva) / (1-((1*this.tasa_aval)/100)*(1+((1*this.iva)/100))))-(cuota_fija + seguro_cuota + iva)) / (1+((1*this.iva)/100)));
+                iva_19 = Math.round((comision*this.iva)/100);
 
                 let itemsCuota = [cuota_fija, comision, iva_19, seguro_cuota, iva];
-                var total_cuota = sumaMultiple(itemsCuota);
+                total_cuota = sumaMultiple(itemsCuota);
 
                 var item = {
                     fecha_pago : fecha_pagos,
@@ -160,13 +164,14 @@ class Simulator {
                 items.push(item);
             };
         
-        
         return items;
 
     }
 }
 
 
+
+//DIBUJANDO LA TABLA
 formulario.addEventListener('submit', function(e) {
     e.preventDefault();
 
