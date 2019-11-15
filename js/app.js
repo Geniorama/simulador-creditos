@@ -122,7 +122,9 @@ class Simulator {
 
         var items = new Array();
 
-        var pago_total_seguro = new Array();
+        var resultado_suma = 0;
+
+        console.log(resultado_suma);
 
             for (var i=0; i < num_cuotas; i++) {
                 var numero = i + 1;
@@ -137,9 +139,8 @@ class Simulator {
                 sumarMeses(fecha, 1);
                 
                 var pago_seguro = Math.round((saldo_total * this.seguro) / 100);
-                pago_total_seguro.push(pago_seguro);
 
-                
+                //NECESITO REEMPLAZAR ESE 309 POR LA SUMA DE CADA pago_seguro
 
                 var estudio = Math.round(((309 + this.transferencia + this.recaudo * this.cuotas + this.papeleria) / this.cuotas) * this.cuotas);
                 var seguro_cuota = Math.round(estudio / this.cuotas);
@@ -163,10 +164,11 @@ class Simulator {
                     saldo_al_capital : saldo_total,
                     seguro_cuota : seguro_cuota
                 };
-
-                
+ 
                 items.push(item);
             };
+        
+        
         return items;
 
     }
