@@ -140,9 +140,11 @@ class Simulator {
                 
                 var pago_seguro = Math.round((saldo_total * this.seguro) / 100);
 
-                //NECESITO REEMPLAZAR ESE 309 POR LA SUMA DE CADA pago_seguro
+                //NECESITO REEMPLAZAR ESE suma_total_pago_seguro POR LA SUMA TOTAL DE CADA pago_seguro.
 
-                var estudio = Math.round(((309 + this.transferencia + this.recaudo * this.cuotas + this.papeleria) / this.cuotas) * this.cuotas);
+                var suma_total_pago_seguro = 0
+
+                var estudio = Math.round(((suma_total_pago_seguro + this.transferencia + this.recaudo * this.cuotas + this.papeleria) / this.cuotas) * this.cuotas);
                 var seguro_cuota = Math.round(estudio / this.cuotas);
                 
                 var iva = Math.round((seguro_cuota * this.iva) / 100);
