@@ -1,3 +1,6 @@
+//ESTE ARCHIVO ES DE LA RAMA NUEVA
+
+
 /*============== VARIABLES GLOBALES ===================*/
 
 const formulario = document.querySelector('#simulator');
