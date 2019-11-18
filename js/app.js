@@ -115,7 +115,6 @@ class Simulator {
         var fecha = this.fecha;
         var fecha = fecha.split('-');
         fecha = new Date(fecha[0], fecha[1], fecha[2]);
-<<<<<<< HEAD
         var suma_total_pago_seguro = 0
         var saldo_total = 0;
         var fecha_pagos = '';
@@ -123,15 +122,6 @@ class Simulator {
 
         this.estudio = Math.round(((309 + this.transferencia + this.recaudo * this.cuotas + this.papeleria) / this.cuotas) * this.cuotas);
         var seguro_cuota = Math.round(this.estudio / this.cuotas);
-=======
-        var suma_total_pago_seguro = []
-        console.log(suma_total_pago_seguro)
-        var saldo_total = 0
-        var fecha_pagos = ''
-        var pago_seguro = 0
-        var estudio = Math.round(((30 + this.transferencia + this.recaudo * this.cuotas + this.papeleria) / this.cuotas) * this.cuotas);
-        var seguro_cuota = Math.round(estudio / this.cuotas);
->>>>>>> e6af627ef68443dce80d328a8592f737c3275c5f
         var iva = Math.round((seguro_cuota * this.iva) / 100);
         var comision = 0;
         var iva_19 = 0;
@@ -151,13 +141,7 @@ class Simulator {
                 
                 pago_seguro = Math.round((saldo_total * this.seguro) / 100);
 
-<<<<<<< HEAD
                 suma_total_pago_seguro = suma_total_pago_seguro + pago_seguro
-=======
-                if (suma_total_pago_seguro == '') {
-                    suma_total_pago_seguro.push(pago_seguro)
-                }
->>>>>>> e6af627ef68443dce80d328a8592f737c3275c5f
 
                 //Operación comisión
                 comision = Math.round((((cuota_fija + seguro_cuota + iva) / (1-((1*this.tasa_aval)/100)*(1+((1*this.iva)/100))))-(cuota_fija + seguro_cuota + iva)) / (1+((1*this.iva)/100)));
@@ -179,13 +163,7 @@ class Simulator {
                 items.push(item);
             };
 
-<<<<<<< HEAD
-
-           
-
-           console.log(this.estudio)
-=======
->>>>>>> e6af627ef68443dce80d328a8592f737c3275c5f
+            
         return items;
 
     }
@@ -236,15 +214,3 @@ formulario.addEventListener('submit', function(e) {
     }
 
 })
-
-
-function miFuncion(dato){
-    var miDato = dato
-
-    return miDato
-}
-
-var midato = 45
-var ejecucion = miFuncion(midato)
-
-console.log(ejecucion)
