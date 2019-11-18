@@ -89,69 +89,66 @@ tipo_programa.addEventListener('change', function() {
 //Simulador
 
 class Simulator {
-    constructor(monto, cuotas, fecha, modo, programa, tasa, seguro, recaudo, papeleria, transferencia, iva, tasa_aval, estudio){
-        this.monto = monto;
-        this.cuotas = cuotas;
-        this.fecha = fecha;
-        this.modo = modo;
-        this.programa = programa;
-        this.tasa = tasa;
-        this.seguro = seguro;
-        this.recaudo = recaudo;
-        this.papeleria = papeleria;
-        this.transferencia = transferencia;
-        this.iva = iva;
-        this.tasa_aval = tasa_aval;
-        this.estudio = estudio;
-        
+    constructor(arreglo_datos){
+        this.monto = arreglo_datos.monto;
+        this.cuotas = arreglo_datos.cuotas;
+        this.fecha = arreglo_datos.fecha;
+        this.modo = arreglo_datos.modo;
+        this.programa = arreglo_datos.programa;
+        this.tasa = arreglo_datos.tasa;
+        this.seguro = arreglo_datos.seguro;
+        this.recaudo = arreglo_datos.recaudo;
+        this.papeleria = arreglo_datos.papeleria;
+        this.transferencia = arreglo_datos.transferencia;
+        this.iva = arreglo_datos.iva;
+        this.tasa_aval = arreglo_datos.tasa_aval;
     }
 
     calculate(){
         var meses = new Array ("Ene.","Feb.","Mar.","Abr.","May.","Jun.","Jul.","Ago.","Sept.","Oct.","Nov.","Dic.");
-   
-        var numero = 0;
         var cuota_fija = Math.round(this.monto *( (this.tasa * Math.pow(1 + this.tasa, this.cuotas)) / (Math.pow(1 + this.tasa, this.cuotas) - 1) ));
-        var interes = 0;
-        var num_cuotas = this.cuotas;
-        var abono_al_capital = 0;
-        var saldo_al_capital = this.monto;
         var fecha = this.fecha;
         var fecha = fecha.split('-');
         fecha = new Date(fecha[0], fecha[1], fecha[2]);
-        var suma_total_pago_seguro = 0
-        var saldo_total = 0;
-        var fecha_pagos = '';
-        var pago_seguro = 0;
+        
+        var comision = Math.round((((cuota_fija + seguro_cuota + iva) / (1-((1*this.tasa_aval)/100)*(1+((1*this.iva)/100))))-(cuota_fija + seguro_cuota + iva)) / (1+((1*this.iva)/100)));
+        var iva_19 = Math.round((comision*this.iva)/100);
 
-        this.estudio = Math.round(((309 + this.transferencia + this.recaudo * this.cuotas + this.papeleria) / this.cuotas) * this.cuotas);
-        var seguro_cuota = Math.round(this.estudio / this.cuotas);
-        var iva = Math.round((seguro_cuota * this.iva) / 100);
-        var comision = 0;
-        var iva_19 = 0;
-        var total_cuota = 0;
+        var suma_seguro = 0
 
         var items = new Array();
 
-            for (var i=0; i < num_cuotas; i++) {
-                numero = i + 1;
-                interes = Math.round(saldo_al_capital * this.tasa);
-                abono_al_capital = Math.round(cuota_fija - interes);
-                saldo_al_capital -= Math.round(abono_al_capital);
-                saldo_total = saldo_al_capital + abono_al_capital;
-                
-                fecha_pagos = crearFecha(fecha.getDate(), meses[fecha.getMonth()], fecha.getFullYear(), ' - ');
-                sumarMeses(fecha, 1);
-                
-                pago_seguro = Math.round((saldo_total * this.seguro) / 100);
+            for (var i=0; i < this.cuotas; i++) {
+                let numero = i + 1;
+                let interes = Math.round(this.monto * this.tasa);
+                let abono_al_capital = Math.round(cuota_fija - interes);
 
-                suma_total_pago_seguro = suma_total_pago_seguro + pago_seguro
+                this.monto -= Math.round(abono_al_capital);
+                let saldo_total = this.monto + abono_al_capital;
+                
+                let fecha_pagos = crearFecha(fecha.getDate(), meses[fecha.getMonth()], fecha.getFullYear(), ' / ');
+                sumarMeses(fecha, 1);
+
+                let pago_seguro = Math.round((saldo_total * this.seguro) / 100);
+
+                let total_seguro = 0
+
+                suma_seguro = suma_seguro + pago_seguro
+
+                if (numero === this.cuotas) {
+                    total_seguro = suma_seguro
+                }
+
+                console.log(total_seguro)
+
+                var estudio = Math.round(((309 + this.transferencia + this.recaudo * this.cuotas + this.papeleria) / this.cuotas) * this.cuotas);
+        var seguro_cuota = Math.round(estudio / this.cuotas);
+        var iva = Math.round((seguro_cuota * this.iva) / 100);
 
                 //Operación comisión
-                comision = Math.round((((cuota_fija + seguro_cuota + iva) / (1-((1*this.tasa_aval)/100)*(1+((1*this.iva)/100))))-(cuota_fija + seguro_cuota + iva)) / (1+((1*this.iva)/100)));
-                iva_19 = Math.round((comision*this.iva)/100);
 
                 let itemsCuota = [cuota_fija, comision, iva_19, seguro_cuota, iva];
-                total_cuota = sumaMultiple(itemsCuota);
+                let total_cuota = sumaMultiple(itemsCuota);
 
                 var item = {
                     fecha_pago : fecha_pagos,
@@ -166,10 +163,6 @@ class Simulator {
                 items.push(item);
             };
 
-
-           
-
-           console.log(this.estudio)
         return items;
 
     }
@@ -183,21 +176,22 @@ formulario.addEventListener('submit', function(e) {
 
     datos = new FormData(formulario);
 
-    const monto =  parseInt(datos.get('valor'));
-    const cuotas =  parseInt(datos.get('cuotas'));
-    const fecha = datos.get('fecha');
-    const modo = datos.get('modo-pago');
-    const programa = datos.get('tipo-programa');
-    const tasa = 0.014;
-    const seguro = 0.028;
-    const recaudo = 2100;
-    const papeleria = 2000;
-    const transferencia = 5355;
-    const iva = 19;
-    const tasa_aval = 3.7;
-    const estudio = 0
+    var datos_formulario = {
+        monto  : parseInt(datos.get('valor')),
+        cuotas : parseInt(datos.get('cuotas')),
+        fecha  : datos.get('fecha'),
+        modo   : datos.get('modo-pago'),
+        programa : datos.get('tipo-programa'),
+        tasa : 0.014,
+        seguro : 0.028,
+        recaudo : 2100,
+        papeleria : 2000,
+        transferencia : 5355,
+        iva : 19,
+        tasa_aval : 3.7,
+    }
    
-    const simulacion = new Simulator(monto, cuotas, fecha, modo, programa, tasa, seguro, recaudo, papeleria, transferencia, iva, tasa_aval, estudio);
+    const simulacion = new Simulator(datos_formulario);
 
     const valores = simulacion.calculate();
 
@@ -209,6 +203,7 @@ formulario.addEventListener('submit', function(e) {
 
             cont_res.innerHTML += `
             <tr>
+                <td>${valor.numero}</td>
                 <td>${valor.fecha_pago}</td>
                 <td>${valor.saldo_al_capital}</td> 
                 <td>${valor.interes}</td>
