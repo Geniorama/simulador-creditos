@@ -163,7 +163,7 @@ class Simulator {
                 items.push(item);
             };
 
-            
+            console.log(suma_total_pago_seguro)
         return items;
 
     }
