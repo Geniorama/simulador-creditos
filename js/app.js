@@ -196,12 +196,10 @@ formulario.addEventListener('submit', function(e) {
         tasa_aval : 3.7,
     }
 
-    console.log(datos_formulario.modo)
-
     if (datos_formulario.modo == 2) {
         datos_formulario.tasa_aval = 3.0
     } 
-    
+
     const simulacion = new Simulator(datos_formulario);
 
     const valores = simulacion.calculate();
