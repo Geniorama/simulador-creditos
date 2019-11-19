@@ -110,11 +110,13 @@ class Simulator {
         var fecha = this.fecha;
         var fecha = fecha.split('-');
         fecha = new Date(fecha[0], fecha[1], fecha[2]);
-        
-        var comision = Math.round((((cuota_fija + seguro_cuota + iva) / (1-((1*this.tasa_aval)/100)*(1+((1*this.iva)/100))))-(cuota_fija + seguro_cuota + iva)) / (1+((1*this.iva)/100)));
-        var iva_19 = Math.round((comision*this.iva)/100);
-
-        var suma_seguro = 0
+        var estudio = 0
+        var seguro_cuota = 0
+        var iva = 0
+        var comision = 0
+        var iva_19 = 0
+        var suma_seguro_cuota = 0
+        var total_cuota = 0
 
         var items = new Array();
 
@@ -131,24 +133,10 @@ class Simulator {
 
                 let pago_seguro = Math.round((saldo_total * this.seguro) / 100);
 
-                let total_seguro = 0
+                suma_seguro_cuota = pago_seguro + suma_seguro_cuota
 
-                suma_seguro = suma_seguro + pago_seguro
-
-                if (numero === this.cuotas) {
-                    total_seguro = suma_seguro
-                }
-
-                console.log(total_seguro)
-
-                var estudio = Math.round(((309 + this.transferencia + this.recaudo * this.cuotas + this.papeleria) / this.cuotas) * this.cuotas);
-        var seguro_cuota = Math.round(estudio / this.cuotas);
-        var iva = Math.round((seguro_cuota * this.iva) / 100);
 
                 //Operación comisión
-
-                let itemsCuota = [cuota_fija, comision, iva_19, seguro_cuota, iva];
-                let total_cuota = sumaMultiple(itemsCuota);
 
                 var item = {
                     fecha_pago : fecha_pagos,
@@ -162,6 +150,23 @@ class Simulator {
  
                 items.push(item);
             };
+
+            
+            estudio = Math.round(((suma_seguro_cuota + this.transferencia + this.recaudo * this.cuotas + this.papeleria) / this.cuotas) * this.cuotas);
+            seguro_cuota = Math.round(estudio / this.cuotas);
+            iva = Math.round((seguro_cuota * this.iva) / 100);
+            comision = Math.round((((cuota_fija + seguro_cuota + iva) / (1-((1*this.tasa_aval)/100)*(1+((1*this.iva)/100))))-(cuota_fija + seguro_cuota + iva)) / (1+((1*this.iva)/100)));
+            iva_19 = Math.round((comision*this.iva)/100);
+
+            itemsCuota = [cuota_fija, comision, iva_19, seguro_cuota, iva];
+            var itemsCuota = [cuota_fija, comision, iva_19, seguro_cuota, iva];
+            total_cuota = sumaMultiple(itemsCuota);
+
+            for (const iterator of items) {
+                iterator.cuota_fija = total_cuota
+                iterator.seguro_cuota = seguro_cuota
+            }
+
 
         return items;
 
