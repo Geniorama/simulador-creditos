@@ -27,16 +27,33 @@ function sumarMeses(fecha, num_meses){
 }
 
 function crearFecha(dia, mes, ano, separador) {
-      var dia = dia.toString();
-      var mes = mes.toString();
-    
-      if (dia.length <= 1) {
-          dia = '0' + dia;
-      }
+    var dia = dia.toString();
+    var mes = mes.toString();
+  
+    if (dia.length <= 1) {
+        dia = '0' + dia;
+    }
 
-      var fecha = dia + separador + mes + separador + ano.toString();
-      
-      return fecha;
+    var fecha = dia + separador + mes + separador + ano.toString();
+    
+    return fecha;
+}
+
+
+function crearFechaMinMax(dia, mes, ano, separador) {
+    dia = dia.toString();
+    mes = mes + 1
+    mes = mes.toString();
+  
+    if (dia.length <= 1) {
+        dia = '0' + dia;
+    } else if (mes.length <= 1){
+        mes = '0' + mes;
+    }
+
+    fecha = ano.toString() + separador + mes + separador + dia;
+    
+    return fecha;
 }
 
 function sumaMultiple(arreglo){
@@ -60,14 +77,11 @@ function convertMoneda(numero) {
 
 /*============== VARIABLES GLOBALES ===================*/
 
-const form_simulador = document.querySelector('#simulator');
+const form_simulador = document.querySelector('#simulator')
 
 if(form_simulador){
-  const contenedor = document.querySelector('#variable-content');
-  const cont_cuotas = document.getElementById('cuotas');
-  const cont_res = document.querySelector('#res');
-  const tabla_res = document.querySelector('#tabla-res');
-  const cont_value = document.querySelector('.cont-value')
+  const cont_cuotas = document.getElementById('cuotas')
+  const cont_res = document.querySelector('#res')
   const label_value = document.querySelector('.text-large')
   const botonPDF = document.querySelector('#button-pdf')
   const meses = new Array ("Ene.","Feb.","Mar.","Abr.","May.","Jun.","Jul.","Ago.","Sept.","Oct.","Nov.","Dic.");
@@ -75,6 +89,27 @@ if(form_simulador){
 
 
   /*============== FUNCIONES FORMULARIO ===================*/
+
+
+  const campo_fecha = document.querySelector('#fecha')
+  let get_fecha_actual = new Date();
+
+  
+  fecha_actual_selec = crearFechaMinMax(get_fecha_actual.getDate(), get_fecha_actual.getMonth(), get_fecha_actual.getFullYear(), '-');
+
+  campo_fecha.setAttribute('min', fecha_actual_selec)
+
+  let fecha_max = sumarDias(get_fecha_actual, 60)
+
+  fecha_max = crearFechaMinMax(fecha_max.getDate(), fecha_max.getMonth(), fecha_max.getFullYear(), '-')
+
+  campo_fecha.setAttribute('max', fecha_max)
+  campo_fecha.addEventListener('click', function() {
+      console.log(this.value)
+  })
+
+  
+
 
   const tipo_programa = document.querySelector('#tipo-programa')
 
@@ -116,7 +151,7 @@ if(form_simulador){
       constructor(arreglo_datos){
           this.monto = arreglo_datos.monto;
           this.cuotas = arreglo_datos.cuotas;
-          this.fecha = arreglo_datos.fecha;
+          this.fecha = arreglo_datos.fecha_pick;
           this.modo = arreglo_datos.modo;
           this.programa = arreglo_datos.programa;
           this.tasa = arreglo_datos.tasa;
@@ -133,7 +168,8 @@ if(form_simulador){
           var cuota_fija = Math.round(this.monto *( (this.tasa * Math.pow(1 + this.tasa, this.cuotas)) / (Math.pow(1 + this.tasa, this.cuotas) - 1) ));
           var fecha = this.fecha;
           var fecha = fecha.split('-');
-          fecha = new Date(fecha[0], fecha[1], fecha[2]);
+          fecha = new Date(fecha[0], fecha[1] - 1, fecha[2]);
+
           var estudio = 0
           var seguro_cuota = 0
           var iva = 0
@@ -153,7 +189,10 @@ if(form_simulador){
                   let saldo_total = this.monto + abono_al_capital;
 
                   let fecha_pagos = crearFecha(fecha.getDate(), meses[fecha.getMonth()], fecha.getFullYear(), ' / ');
+
                   sumarMeses(fecha, 1);
+
+                  console.log(fecha)
 
                   let pago_seguro = Math.round((saldo_total * this.seguro) / 100);
 
@@ -209,7 +248,7 @@ if(form_simulador){
       var datos_formulario = {
           monto  : parseInt(datos.get('valor')),
           cuotas : parseInt(datos.get('cuotas')),
-          fecha  : datos.get('fecha'),
+          fecha_pick  : datos.get('fecha'),
           modo   : datos.get('modo-pago'),
           programa : datos.get('tipo-programa'),
           tasa : 0.014,
@@ -220,6 +259,8 @@ if(form_simulador){
           iva : 19,
           tasa_aval : 3.7,
       }
+
+      console.log(datos_formulario.fecha_pick)
 
       if(datos_formulario.modo == 0){
             alert('Debes seleccionar un modo de pago')
