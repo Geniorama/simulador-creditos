@@ -224,8 +224,7 @@ if(form_simulador){
             =PAGO(0,016;60;13500;;0)
           */
 
-          var tasa_oper = this.tasa
-          var cuota_fija = calcCuotaFija(this.monto, tasa_oper, this.cuotas);
+          var cuota_fija = calcCuotaFija(this.monto, this.tasa, this.cuotas);
 
           var items = new Array();
 
@@ -233,6 +232,8 @@ if(form_simulador){
                   let numero = i + 1;
                   
                   let interes = 0;
+
+                  console.log(saldo_inicial)
 
                   //Variación de interés por días de interés
                   if (numero == 1) {
