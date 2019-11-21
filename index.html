@@ -16,7 +16,7 @@
                     <form action="" id="simulator" >
                         <div class="form-group">
                             <label for="modo-pago">Modo de pago</label>
-                            <select class="custom-select" id="modo-pago" name="modo-pago">
+                            <select class="custom-select" id="modo-pago" name="modo-pago" required>
                                 <option selected>Selecciona una opción</option>
                                 <option value="1">Pagaré</option>
                                 <option value="2">Cheque</option>
@@ -25,7 +25,7 @@
                         
                         <div class="form-group">
                             <label for="tipo-programa">Tipo de programa</label>
-                            <select class="custom-select" id="tipo-programa" name="tipo-programa">
+                            <select class="custom-select" id="tipo-programa" name="tipo-programa" required>
                                 <option selected>Selecciona una opción</option>
                                 <option value="1">Pregrado</option>
                                 <option value="2">Postgrado</option>
@@ -36,12 +36,12 @@
 
                         <div class="form-group">
                             <label for="valor">Valor solicitado</label>
-                            <input type="text" class="form-control" id="valor" name="valor">
+                            <input type="text" class="form-control" id="valor" name="valor" required>
                         </div>
 
                         <div class="form-group">
                             <label for="cuotas">Cuotas</label>
-                            <select class="custom-select" id="cuotas" name="cuotas">
+                            <select class="custom-select" id="cuotas" name="cuotas" required>
                                 <option selected>Selecciona una opción</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
@@ -53,8 +53,13 @@
                         </div>
 
                         <div class="form-group">
+                            <label for="fecha">Fecha Solicitud</label>
+                            <input type="date" class="form-control" id="fecha-solicitud" name="fecha-solicitud" required>
+                        </div>
+
+                        <div class="form-group">
                             <label for="fecha">Fecha 1ra cuota</label>
-                            <input type="date" class="form-control" id="fecha" name="fecha" min="2019-01-01" max="2019-12-31">
+                            <input type="date" class="form-control" id="fecha-cuota-uno" name="fecha-cuota-uno" required>
                         </div>
 
                         <div class="form-group">
