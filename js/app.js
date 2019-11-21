@@ -74,6 +74,13 @@ function convertMoneda(numero) {
     return numero
 }
 
+function calcCuotaFija(monto, tasa, no_cuotas) {
+    valor_cuota = Math.round(monto *( (tasa * Math.pow(1 + tasa, no_cuotas)) / (Math.pow(1 + tasa, no_cuotas) - 1) ));
+
+    return valor_cuota
+}
+    
+
 
 /*============== VARIABLES GLOBALES ===================*/
 
@@ -166,6 +173,7 @@ if(form_simulador){
       constructor(arreglo_datos){
           this.monto = arreglo_datos.monto;
           this.cuotas = arreglo_datos.cuotas;
+          this.fecha_solicitud = arreglo_datos.fecha_solicitud;
           this.fecha = arreglo_datos.fecha_pick;
           this.modo = arreglo_datos.modo;
           this.programa = arreglo_datos.programa;
@@ -180,10 +188,17 @@ if(form_simulador){
 
       calculate(){
 
-          var cuota_fija = Math.round(this.monto *( (this.tasa * Math.pow(1 + this.tasa, this.cuotas)) / (Math.pow(1 + this.tasa, this.cuotas) - 1) ));
-          var fecha = this.fecha;
-          var fecha = fecha.split('-');
-          fecha = new Date(fecha[0], fecha[1] - 1, fecha[2]);
+          
+          var fecha_solicitud_simulador = this.fecha_solicitud
+          var fecha = this.fecha
+
+          var fecha_ini = new Date(fecha_solicitud_simulador)
+          var fecha_fin = new Date(fecha)
+          var dif_fechas = fecha_fin.getTime() - fecha_ini.getTime()
+          var contdias = Math.round(dif_fechas/(1000*60*60*24));
+
+          var fecha = fecha.split('-')
+          fecha = new Date(fecha[0], fecha[1] - 1, fecha[2])
           var estudio = 0
           var seguro_cuota = 0
           var iva = 0
@@ -191,22 +206,50 @@ if(form_simulador){
           var iva_19 = 0
           var suma_seguro_cuota = 0
           var total_cuota = 0
+          var saldo_inicial = this.monto
+
+          
+          var potencia = contdias / 30
+          var oper_cuota_fija = Math.pow(1 + this.tasa, this.cuotas)
+
+          /*
+          María necesita $13.500 USD, el Banco le ofrece un préstamo a 5 años con cuotas mensuales y una tasa de interés del 1,6% Mensual. ¿Cuál es el valor de la cuota del préstamo?
+
+            Ahora reemplazamos en la formula: A = VP ((i(1 + i)n) / ((1 + i)n – 1))
+
+            Tenemos entonces que A = 13.500 ((0,016(1 + 0,016)60) / ((1 + 0,016)60 – 1)) = 351,68
+
+            Ahora en excel:
+
+            =PAGO(0,016;60;13500;;0)
+          */
+
+          var tasa_oper = this.tasa
+          var cuota_fija = calcCuotaFija(this.monto, tasa_oper, this.cuotas);
 
           var items = new Array();
 
               for (var i=0; i < this.cuotas; i++) {
                   let numero = i + 1;
-                  let interes = Math.round(this.monto * this.tasa);
+                  
+                  let interes = 0;
+
+                  //Variación de interés por días de interés
+                  if (numero == 1) {
+                     interes = Math.round((saldo_inicial * this.tasa) / 30) * contdias;
+                     
+                  } else {
+                      interes = Math.round(saldo_inicial  * this.tasa)
+                  }
+
                   let abono_al_capital = Math.round(cuota_fija - interes);
 
-                  this.monto -= Math.round(abono_al_capital);
-                  let saldo_total = this.monto + abono_al_capital;
+                  saldo_inicial -= Math.round(abono_al_capital);
+                  let saldo_total = saldo_inicial + abono_al_capital;
 
                   let fecha_pagos = crearFecha(fecha.getDate(), meses[fecha.getMonth()], fecha.getFullYear(), ' / ');
 
                   sumarMeses(fecha, 1);
-
-                 
 
                   let pago_seguro = Math.round((saldo_total * this.seguro) / 100);
 
@@ -236,7 +279,6 @@ if(form_simulador){
               iva = Math.round((seguro_cuota * this.iva) / 100);
               comision = Math.round((((cuota_fija + seguro_cuota + iva) / (1-((1*this.tasa_aval)/100)*(1+((1*this.iva)/100))))-(cuota_fija + seguro_cuota + iva)) / (1+((1*this.iva)/100)));
               iva_19 = Math.round((comision*this.iva)/100);
-
               itemsCuota = [cuota_fija, comision, iva_19, seguro_cuota, iva];
               var itemsCuota = [cuota_fija, comision, iva_19, seguro_cuota, iva];
               total_cuota = sumaMultiple(itemsCuota);
@@ -262,6 +304,7 @@ if(form_simulador){
       var datos_formulario = {
           monto  : parseInt(datos.get('valor')),
           cuotas : parseInt(datos.get('cuotas')),
+          fecha_solicitud : datos.get('fecha-solicitud'),
           fecha_pick  : datos.get('fecha-cuota-uno'),
           modo   : datos.get('modo-pago'),
           programa : datos.get('tipo-programa'),
