@@ -223,7 +223,7 @@ if(form_simulador){
             =PAGO(0,016;60;13500;;0)
           */
 
-          var cuota_fija = 0;
+          var  cuota_fija = calcCuotaFija(saldo_inicial, this.tasa, this.cuotas)
 
           var items = new Array();
 
@@ -238,15 +238,10 @@ if(form_simulador){
                   if (numero == 1) {
                       saldo_inicial = this.monto
                       interes = Math.round((saldo_inicial * this.tasa) / 30) * contdias;
-                      cuota_fija = calcCuotaFija(saldo_inicial, this.tasa, this.cuotas)   
                      
                   } else {
                       interes = Math.round(saldo_inicial  * this.tasa)
-                      cuota_fija = calcCuotaFija(this.monto, this.tasa, this.cuotas)
                   }
-
-                  console.log(cuota_fija)
-                  //console.log(saldo_inicial)
 
                   let abono_al_capital = Math.round(cuota_fija - interes);
 
