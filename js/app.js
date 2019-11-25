@@ -131,12 +131,7 @@ if(form_simulador){
 })
 
 
- 
 
-<<<<<<< HEAD
-            console.log(suma_total_pago_seguro)
-        return items;
-=======
   const tipo_programa = document.querySelector('#tipo-programa')
 
   tipo_programa.addEventListener('change', function() {
@@ -200,8 +195,7 @@ if(form_simulador){
           var fecha_fin = new Date(fecha)
           var dif_fechas = fecha_fin.getTime() - fecha_ini.getTime()
           var contdias = Math.round(dif_fechas/(1000*60*60*24));
->>>>>>> nueva
-
+          
           var fecha = fecha.split('-')
           fecha = new Date(fecha[0], fecha[1] - 1, fecha[2])
           var estudio = 0
@@ -229,24 +223,30 @@ if(form_simulador){
             =PAGO(0,016;60;13500;;0)
           */
 
-          var cuota_fija = calcCuotaFija(this.monto, this.tasa, this.cuotas);
+          var cuota_fija = 0;
 
           var items = new Array();
 
               for (var i=0; i < this.cuotas; i++) {
                   let numero = i + 1;
+
+                  
                   
                   let interes = 0;
 
-                  console.log(saldo_inicial)
-
                   //Variación de interés por días de interés
                   if (numero == 1) {
-                     interes = Math.round((saldo_inicial * this.tasa) / 30) * contdias;
+                      saldo_inicial = this.monto
+                      interes = Math.round((saldo_inicial * this.tasa) / 30) * contdias;
+                      cuota_fija = calcCuotaFija(saldo_inicial, this.tasa, this.cuotas)   
                      
                   } else {
                       interes = Math.round(saldo_inicial  * this.tasa)
+                      cuota_fija = calcCuotaFija(this.monto, this.tasa, this.cuotas)
                   }
+
+                  console.log(cuota_fija)
+                  //console.log(saldo_inicial)
 
                   let abono_al_capital = Math.round(cuota_fija - interes);
 
@@ -320,7 +320,7 @@ if(form_simulador){
           papeleria : 2000,
           transferencia : 5355,
           iva : 19,
-          tasa_aval : 3.7,
+          tasa_aval : 3.7
       }
 
       if(datos_formulario.modo == 0){
