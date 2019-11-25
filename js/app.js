@@ -1,3 +1,6 @@
+/*RAMA DE AJUSTE PARA CUOTA FIJA*/
+
+
 /* Añade aquí tu código JavaScript.
 
 Si estás usando la biblioteca jQuery, entonces no olvides envolver tu código dentro de jQuery.ready() así:
@@ -223,21 +226,20 @@ if(form_simulador){
             =PAGO(0,016;60;13500;;0)
           */
 
-          var  cuota_fija = calcCuotaFija(saldo_inicial, this.tasa, this.cuotas)
+          var  cuota_fija = 0
 
           var items = new Array();
 
               for (var i=0; i < this.cuotas; i++) {
                   let numero = i + 1;
 
-                  
-                  
                   let interes = 0;
 
                   //Variación de interés por días de interés
                   if (numero == 1) {
                       saldo_inicial = this.monto
                       interes = Math.round((saldo_inicial * this.tasa) / 30) * contdias;
+                      calcCuotaFija(saldo_inicial, this.tasa, this.cuotas)
                      
                   } else {
                       interes = Math.round(saldo_inicial  * this.tasa)
