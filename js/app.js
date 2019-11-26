@@ -77,6 +77,16 @@ function convertMoneda(numero) {
     return numero
 }
 
+/*
+FUNCION PAGO
+
+María necesita $13.500 USD, el Banco le ofrece un préstamo a 5 años con cuotas mensuales y una tasa de interés del 1,6% Mensual. ¿Cuál es el valor de la cuota del préstamo?
+
+Ahora reemplazamos en la formula: A = VP ((i(1 + i)n) / ((1 + i)n – 1))
+
+Tenemos entonces que A = 13.500 ((0,016(1 + 0,016)60) / ((1 + 0,016)60 – 1)) = 351,68
+*/
+
 function calcCuotaFija(monto, tasa, no_cuotas) {
     valor_cuota = Math.round(monto *( (tasa * Math.pow(1 + tasa, no_cuotas)) / (Math.pow(1 + tasa, no_cuotas) - 1) ));
 
@@ -213,7 +223,6 @@ if(form_simulador){
           var interes = 0;
           var saldo_total = 0
           var items = new Array();
-          var valores_cj = new Array()
 
               for (var i=0; i < this.cuotas; i++) {
                   let numero = i + 1;
@@ -227,7 +236,6 @@ if(form_simulador){
                       cuota_fija = calcCuotaFija(this.monto, this.tasa, this.cuotas)
                   }
                   
-                  valores_cj.push(cuota_fija)
 
                   let abono_al_capital = Math.round(cuota_fija - interes);
                   
@@ -261,26 +269,10 @@ if(form_simulador){
                   items.push(item);
               };
 
-
-              
-              //Valores variables
-
-              /*
-              SALDO
-              ABONO AL CAPITAL
-              COMISION
-              IVA_19(COMISION)
-              */
-
               //Valores fijos
               estudio = Math.round(((suma_seguro_cuota + this.transferencia + this.recaudo * this.cuotas + this.papeleria) / this.cuotas) * this.cuotas);
               seguro_cuota = Math.round(estudio / this.cuotas);
               iva = Math.round((seguro_cuota * this.iva) / 100);
-
-              for (const valor_cj of valores_cj) {
-                console.log(valor_cj) 
-              }
-              
 
               for (let index = 0; index < items.length; index++) {
                   let contador = index + 1   
