@@ -1,86 +1,3 @@
-/* Añade aquí tu código JavaScript.
-
-Si estás usando la biblioteca jQuery, entonces no olvides envolver tu código dentro de jQuery.ready() así:
-
-jQuery(document).ready(function( $ ){
-    // Tu código aquí dentro
-});
-
---
-
-Si quieres enlazar a un archivo JavaScript que resida en otro servidor (como
-<script src="https://example.com/your-js-file.js"></script>), entonces, por favor, usa
-la página «Añadir código HTML» , ya que es un código HTML que enlaza a un archivo JavaScript.
-
-Fin del comentario */ 
-
-/*============== FUNCIONES AUXILIARES ===================*/
-
-function sumarDias(fecha, dias){
-    fecha.setDate(fecha.getDate() + dias);
-    return fecha;
-}
-
-function sumarMeses(fecha, num_meses){
-    fecha.setMonth(fecha.getMonth() + num_meses);
-    return fecha;
-}
-
-function crearFecha(dia, mes, ano, separador) {
-    var dia = dia.toString();
-    var mes = mes.toString();
-  
-    if (dia.length <= 1) {
-        dia = '0' + dia;
-    }
-
-    var fecha = dia + separador + mes + separador + ano.toString();
-    
-    return fecha;
-}
-
-
-function crearFechaMinMax(dia, mes, ano, separador) {
-    dia = dia.toString();
-    mes = mes + 1
-    mes = mes.toString();
-  
-    if (dia.length <= 1) {
-        dia = '0' + dia;
-    } else if (mes.length <= 1){
-        mes = '0' + mes;
-    }
-
-    fecha = ano.toString() + separador + mes + separador + dia;
-    
-    return fecha;
-}
-
-function sumaMultiple(arreglo){
-    var suma = 0;
-
-    for (let numero of arreglo) {
-        numero = parseInt(numero);
-        suma = suma + numero;
-    }
-
-    return suma;
-}
-
-function convertMoneda(numero) {
-    numero = new Intl.NumberFormat('es-CO').format(numero)
-    numero = '$'+numero
-
-    return numero
-}
-
-function calcCuotaFija(monto, tasa, no_cuotas) {
-    valor_cuota = Math.round(monto *( (tasa * Math.pow(1 + tasa, no_cuotas)) / (Math.pow(1 + tasa, no_cuotas) - 1) ));
-
-    return valor_cuota
-}
-    
-
 
 /*============== VARIABLES GLOBALES ===================*/
 
@@ -185,9 +102,14 @@ if(form_simulador){
           this.tasa_aval = arreglo_datos.tasa_aval;
       }
 
+      calcCuotaFija() {
+        let valor_cuota = Math.round(this.monto *( (this.tasa * Math.pow(1 + this.tasa, this.cuotas)) / (Math.pow(1 + this.tasa, this.cuotas) - 1) ));
+    
+        return valor_cuota
+      }
+
       calculate(){
 
-          
           var fecha_solicitud_simulador = this.fecha_solicitud
           var fecha = this.fecha
 
@@ -207,38 +129,17 @@ if(form_simulador){
           var total_cuota = 0
           var saldo_inicial = this.monto
 
-          
-          var potencia = contdias / 30
-          var oper_cuota_fija = Math.pow(1 + this.tasa, this.cuotas)
-
-          /*
-          María necesita $13.500 USD, el Banco le ofrece un préstamo a 5 años con cuotas mensuales y una tasa de interés del 1,6% Mensual. ¿Cuál es el valor de la cuota del préstamo?
-
-            Ahora reemplazamos en la formula: A = VP ((i(1 + i)n) / ((1 + i)n – 1))
-
-            Tenemos entonces que A = 13.500 ((0,016(1 + 0,016)60) / ((1 + 0,016)60 – 1)) = 351,68
-
-            Ahora en excel:
-
-            =PAGO(0,016;60;13500;;0)
-          */
-
-          var  cuota_fija = calcCuotaFija(saldo_inicial, this.tasa, this.cuotas)
+          var  cuota_fija = this.calcCuotaFija()
 
           var items = new Array();
 
               for (var i=0; i < this.cuotas; i++) {
                   let numero = i + 1;
-
-                  
-                  
                   let interes = 0;
 
                   //Variación de interés por días de interés
                   if (numero == 1) {
-                      saldo_inicial = this.monto
-                      interes = Math.round((saldo_inicial * this.tasa) / 30) * contdias;
-                     
+                      interes = Math.round((saldo_inicial * this.tasa) / 30) * contdias; 
                   } else {
                       interes = Math.round(saldo_inicial  * this.tasa)
                   }
