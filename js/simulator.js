@@ -1,100 +1,6 @@
 /*RAMA DE AJUSTE PARA CUOTA FIJA*/
 
 
-/* Añade aquí tu código JavaScript.
-
-Si estás usando la biblioteca jQuery, entonces no olvides envolver tu código dentro de jQuery.ready() así:
-
-jQuery(document).ready(function( $ ){
-    // Tu código aquí dentro
-});
-
---
-
-Si quieres enlazar a un archivo JavaScript que resida en otro servidor (como
-<script src="https://example.com/your-js-file.js"></script>), entonces, por favor, usa
-la página «Añadir código HTML» , ya que es un código HTML que enlaza a un archivo JavaScript.
-
-Fin del comentario */ 
-
-/*============== FUNCIONES AUXILIARES ===================*/
-
-function sumarDias(fecha, dias){
-    fecha.setDate(fecha.getDate() + dias);
-    return fecha;
-}
-
-function sumarMeses(fecha, num_meses){
-    fecha.setMonth(fecha.getMonth() + num_meses);
-    return fecha;
-}
-
-function crearFecha(dia, mes, ano, separador) {
-    var dia = dia.toString();
-    var mes = mes.toString();
-  
-    if (dia.length <= 1) {
-        dia = '0' + dia;
-    }
-
-    var fecha = dia + separador + mes + separador + ano.toString();
-    
-    return fecha;
-}
-
-
-function crearFechaMinMax(dia, mes, ano, separador) {
-    dia = dia.toString();
-    mes = mes + 1
-    mes = mes.toString();
-  
-    if (dia.length <= 1) {
-        dia = '0' + dia;
-    } else if (mes.length <= 1){
-        mes = '0' + mes;
-    }
-
-    fecha = ano.toString() + separador + mes + separador + dia;
-    
-    return fecha;
-}
-
-function sumaMultiple(arreglo){
-    var suma = 0;
-
-    for (let numero of arreglo) {
-        numero = parseInt(numero);
-        suma = suma + numero;
-    }
-
-    return suma;
-}
-
-function convertMoneda(numero) {
-    numero = new Intl.NumberFormat('es-CO').format(numero)
-    numero = '$'+numero
-
-    return numero
-}
-
-/*
-FUNCION PAGO
-
-María necesita $13.500 USD, el Banco le ofrece un préstamo a 5 años con cuotas mensuales y una tasa de interés del 1,6% Mensual. ¿Cuál es el valor de la cuota del préstamo?
-
-Ahora reemplazamos en la formula: A = VP ((i(1 + i)n) / ((1 + i)n – 1))
-
-Tenemos entonces que A = 13.500 ((0,016(1 + 0,016)60) / ((1 + 0,016)60 – 1)) = 351,68
-*/
-
-function calcCuotaFija(monto, tasa, no_cuotas) {
-    valor_cuota = Math.round(monto *( (tasa * Math.pow(1 + tasa, no_cuotas)) / (Math.pow(1 + tasa, no_cuotas) - 1) ));
-
-    return valor_cuota
-}
-    
-
-
 /*============== VARIABLES GLOBALES ===================*/
 
 const form_simulador = document.querySelector('#simulator')
@@ -108,7 +14,7 @@ if(form_simulador){
   const container_res = document.querySelector('#container-result')
 
 
-  /*============== FUNCIONES FORMULARIO ===================*/
+/*============== FUNCIONES FORMULARIO ===================*/
 
 
   const fecha_solicitud = document.querySelector('#fecha-solicitud')
@@ -198,9 +104,12 @@ if(form_simulador){
           this.tasa_aval = arreglo_datos.tasa_aval;
       }
 
-      calculate(){
+      calcCuotaFija(){
+            let valor_cuota = Math.round(this.monto *( (this.tasa * Math.pow(1 + this.tasa, this.cuotas)) / (Math.pow(1 + this.tasa, this.cuotas) - 1) ));
+            return valor_cuota
+      }
 
-          
+      calculate(){
           var fecha_solicitud_simulador = this.fecha_solicitud
           var fecha = this.fecha
 
@@ -223,6 +132,7 @@ if(form_simulador){
           var interes = 0;
           var saldo_total = 0
           var items = new Array();
+          cuota_fija = this.calcCuotaFija()
 
               for (var i=0; i < this.cuotas; i++) {
                   let numero = i + 1;
@@ -230,10 +140,9 @@ if(form_simulador){
                   //Variación de interés por días de interés
                   if (numero == 1) {
                       interes = Math.round((saldo_inicial * this.tasa) / 30) * contdias;
-                      cuota_fija = calcCuotaFija(this.monto, this.tasa, this.cuotas)
+                      
                   } else {
-                      interes = Math.round(saldo_inicial * this.tasa)
-                      cuota_fija = calcCuotaFija(this.monto, this.tasa, this.cuotas)
+                      interes = Math.round(saldo_inicial * this.tasa) 
                   }
                   
 
@@ -269,30 +178,25 @@ if(form_simulador){
                   items.push(item);
               };
 
+              console.log(cuota_fija)
+
               //Valores fijos
               estudio = Math.round(((suma_seguro_cuota + this.transferencia + this.recaudo * this.cuotas + this.papeleria) / this.cuotas) * this.cuotas);
               seguro_cuota = Math.round(estudio / this.cuotas);
               iva = Math.round((seguro_cuota * this.iva) / 100);
 
-              for (let index = 0; index < items.length; index++) {
-                  let contador = index + 1   
-                  let elemento = items[index]
+              comision = Math.round((((cuota_fija + seguro_cuota + iva) / (1-((1*this.tasa_aval)/100)*(1+((1*this.iva)/100))))-(cuota_fija + seguro_cuota + iva)) / (1+((1*this.iva)/100)));
+              iva_19 = Math.round((comision*this.iva)/100);
+              var itemsCuota = [cuota_fija, comision, iva_19, seguro_cuota, iva];
+              total_cuota = sumaMultiple(itemsCuota);
 
-                  if (contador == 1) {
-                    cuota_fija = calcCuotaFija(this.monto, this.tasa, this.cuotas)
-                  } else {
-                    cuota_fija = calcCuotaFija(this.monto, this.tasa, this.cuotas)
-                  }
+                  
 
-                  comision = Math.round((((cuota_fija + seguro_cuota + iva) / (1-((1*this.tasa_aval)/100)*(1+((1*this.iva)/100))))-(cuota_fija + seguro_cuota + iva)) / (1+((1*this.iva)/100)));
-                  iva_19 = Math.round((comision*this.iva)/100);
-                  var itemsCuota = [cuota_fija, comision, iva_19, seguro_cuota, iva];
-                  total_cuota = sumaMultiple(itemsCuota);
+              for (let elemento of items) {
 
-                  elemento.cuota_fija = convertMoneda(total_cuota)
-                  elemento.seguro_cuota = convertMoneda(seguro_cuota) 
-                  elemento.comision = convertMoneda(comision)
-                   
+                elemento.cuota_fija = convertMoneda(total_cuota)
+                elemento.seguro_cuota = convertMoneda(seguro_cuota) 
+                elemento.comision = convertMoneda(comision) 
               }
 
           return items;
