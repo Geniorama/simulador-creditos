@@ -221,10 +221,10 @@ if(form_simulador){
 
       if(datos_formulario.modo == 0){
             alert('Debes seleccionar un modo de pago')
+      } else if (datos_formulario.programa == 0){
+        alert('Debes seleccionar el tipo de programa')
       } else if (datos_formulario.cuotas == 0){
             alert('Debes seleccionar la cantidad de cuotas')
-      } else if (datos_formulario.programa == 0){
-            alert('Debes seleccionar el tipo de programa')
       } else {
             if (datos_formulario.modo == 2) {
                 datos_formulario.tasa_aval = 3.0

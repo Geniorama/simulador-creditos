@@ -10,7 +10,7 @@ function sumarMeses(fecha, num_meses){
     return fecha;
 }
 
-function crearFecha(dia, mes, ano, separador) {
+function crearFecha(dia, mes, agno, separador) {
     var dia = dia.toString();
     var mes = mes.toString();
   
@@ -18,13 +18,13 @@ function crearFecha(dia, mes, ano, separador) {
         dia = '0' + dia;
     }
 
-    var fecha = dia + separador + mes + separador + ano.toString();
+    var fecha = dia + separador + mes + separador + agno.toString();
     
     return fecha;
 }
 
 
-function crearFechaMinMax(dia, mes, ano, separador) {
+function crearFechaMinMax(dia, mes, agno, separador) {
     dia = dia.toString();
     mes = mes + 1
     mes = mes.toString();
@@ -35,7 +35,7 @@ function crearFechaMinMax(dia, mes, ano, separador) {
         mes = '0' + mes;
     }
 
-    fecha = ano.toString() + separador + mes + separador + dia;
+    fecha = agno.toString() + separador + mes + separador + dia;
     
     return fecha;
 }
@@ -56,5 +56,17 @@ function convertMoneda(numero) {
     numero = '$'+numero
 
     return numero
+}
+
+
+function validateForm(arrayInputs){
+    for (const input of arrayInputs) {
+        inputValue = input.value
+        inputName = input.getAttribute('data-name')
+
+        if (inputValue == '') {
+            alert("Debes completar el campo " + inputName)
+        }
+    }
 }
 

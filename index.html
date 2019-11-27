@@ -16,8 +16,8 @@
                     <form action="" id="simulator" >
                         <div class="form-group">
                             <label for="modo-pago">Modo de pago</label>
-                            <select class="custom-select" id="modo-pago" name="modo-pago" required>
-                                <option selected>Selecciona una opción</option>
+                            <select class="custom-select" id="modo-pago" name="modo-pago" data-name="Modo de pago" required>
+                                <option selected value="0">Selecciona una opción</option>
                                 <option value="1">Pagaré</option>
                                 <option value="2">Cheque</option>
                             </select>
@@ -25,8 +25,8 @@
                         
                         <div class="form-group">
                             <label for="tipo-programa">Tipo de programa</label>
-                            <select class="custom-select" id="tipo-programa" name="tipo-programa" required>
-                                <option selected>Selecciona una opción</option>
+                            <select class="custom-select" id="tipo-programa" name="tipo-programa" data-name="Tipo de programa" required>
+                                <option selected value="0">Selecciona una opción</option>
                                 <option value="1">Pregrado</option>
                                 <option value="2">Postgrado</option>
                             </select>
@@ -36,13 +36,13 @@
 
                         <div class="form-group">
                             <label for="valor">Valor solicitado</label>
-                            <input type="text" class="form-control" id="valor" name="valor" required>
+                            <input type="text" class="form-control" id="valor" name="valor" data-name="Valor solicitado" required>
                         </div>
 
                         <div class="form-group">
                             <label for="cuotas">Cuotas</label>
-                            <select class="custom-select" id="cuotas" name="cuotas" required>
-                                <option selected>Selecciona una opción</option>
+                            <select class="custom-select" id="cuotas" name="cuotas" data-name="Cuotas" required>
+                                <option selected value="0">Selecciona una opción</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
@@ -54,12 +54,12 @@
 
                         <div class="form-group">
                             <label for="fecha">Fecha Solicitud</label>
-                            <input type="date" class="form-control" id="fecha-solicitud" name="fecha-solicitud" required>
+                            <input type="date" class="form-control" id="fecha-solicitud" data-name="Fecha solicitud" name="fecha-solicitud" required>
                         </div>
 
                         <div class="form-group">
                             <label for="fecha">Fecha 1ra cuota</label>
-                            <input type="date" class="form-control" id="fecha-cuota-uno" name="fecha-cuota-uno" required>
+                            <input type="date" class="form-control" id="fecha-cuota-uno" data-name="Fecha 1ra cuota" name="fecha-cuota-uno" required>
                         </div>
 
                         <div class="form-group">
