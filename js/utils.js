@@ -62,7 +62,7 @@ function convertMoneda(numero) {
 function validarCampo(input) {
 
     if (input == "" || input <= 0) {
-        alert('Debe diligenciar el campo' + getAttribute('data-name'))
+        alert('Debe diligenciar el campo' + input.getAttribute('data-name'))
         return false
     } else {
         console.log('Diligenciado')
