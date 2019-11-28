@@ -17,23 +17,16 @@
         this.tasa_aval = arreglo_datos.tasa_aval;
     }
 
-    calcCuotaFija() {
-      let valor_cuota = Math.round(this.monto *( (this.tasa * Math.pow(1 + this.tasa, this.cuotas)) / (Math.pow(1 + this.tasa, this.cuotas) - 1) ));
-  
-      return valor_cuota
-    }
+    
 
     calculate(){
         const meses = new Array ("Ene.","Feb.","Mar.","Abr.","May.","Jun.","Jul.","Ago.","Sept.","Oct.","Nov.","Dic.");
-
         var fecha_solicitud_simulador = this.fecha_solicitud
         var fecha = this.fecha
-
         var fecha_ini = new Date(fecha_solicitud_simulador)
         var fecha_fin = new Date(fecha)
         var dif_fechas = fecha_fin.getTime() - fecha_ini.getTime()
         var contdias = Math.round(dif_fechas/(1000*60*60*24));
-        
         var fecha = fecha.split('-')
         fecha = new Date(fecha[0], fecha[1] - 1, fecha[2])
         var estudio = 0
@@ -45,7 +38,9 @@
         var total_cuota = 0
         var saldo_inicial = this.monto
 
-        var  cuota_fija = this.calcCuotaFija()
+        let tasa_int = Math.pow((1 + this.tasa), (1/12)) - 1
+
+        var  cuota_fija = calcCuotaFija(this.monto, this.tasa, this.cuotas)
 
         var items = new Array();
 
@@ -55,13 +50,15 @@
 
                 //Variación de interés por días de interés
                 if (numero == 1) {
-                    interes = Math.round((saldo_inicial * this.tasa) / 30) * contdias; 
+                    interes = Math.round((saldo_inicial * this.tasa) / 30) * contdias;
                 } else {
                     interes = Math.round(saldo_inicial  * this.tasa)
                 }
 
+
                 let abono_al_capital = Math.round(cuota_fija - interes);
 
+                console.log(cuota_fija)
                 saldo_inicial -= Math.round(abono_al_capital);
                 let saldo_total = saldo_inicial + abono_al_capital;
 
@@ -95,13 +92,19 @@
             estudio = Math.round(((suma_seguro_cuota + this.transferencia + this.recaudo * this.cuotas + this.papeleria) / this.cuotas) * this.cuotas);
             seguro_cuota = Math.round(estudio / this.cuotas);
             iva = Math.round((seguro_cuota * this.iva) / 100);
-            comision = Math.round((((cuota_fija + seguro_cuota + iva) / (1-((1*this.tasa_aval)/100)*(1+((1*this.iva)/100))))-(cuota_fija + seguro_cuota + iva)) / (1+((1*this.iva)/100)));
-            iva_19 = Math.round((comision*this.iva)/100);
-            itemsCuota = [cuota_fija, comision, iva_19, seguro_cuota, iva];
-            var itemsCuota = [cuota_fija, comision, iva_19, seguro_cuota, iva];
-            total_cuota = sumaMultiple(itemsCuota);
+            
+            let contador = 0
 
             for (const iterator of items) {
+
+                contador = contador + 1
+
+                comision = Math.round((((cuota_fija + seguro_cuota + iva) / (1-((1*this.tasa_aval)/100)*(1+((1*this.iva)/100))))-(cuota_fija + seguro_cuota + iva)) / (1+((1*this.iva)/100)));
+                iva_19 = Math.round((comision*this.iva)/100);
+                itemsCuota = [cuota_fija, comision, iva_19, seguro_cuota, iva];
+                var itemsCuota = [cuota_fija, comision, iva_19, seguro_cuota, iva];
+                total_cuota = sumaMultiple(itemsCuota);
+
                 iterator.cuota_fija = convertMoneda(total_cuota)
                 iterator.seguro_cuota = convertMoneda(seguro_cuota) 
                 iterator.comision = convertMoneda(comision)
