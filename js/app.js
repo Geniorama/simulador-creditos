@@ -137,9 +137,9 @@ if(form_simulador){
             fecha_cuota_uno.readOnly = true
         } else {
             fecha_cuota_uno.readOnly = false
-            fecha_cuota_uno.setAttribute('min', fecha_solicitud_val)
+            fecha_cuota_uno.setAttribute('min', this.value)
             
-            let fecha_actual_solicitud = fecha_solicitud_val.split('-')
+            let fecha_actual_solicitud = this.value.split('-')
             fecha_actual_solicitud = new Date(fecha_actual_solicitud[0], fecha_actual_solicitud[1] - 1, fecha_actual_solicitud[2])
             let fecha_max = sumarDias(fecha_actual_solicitud, 60)
             fecha_max = crearFechaMinMax(fecha_max.getDate(), fecha_max.getMonth(), fecha_max.getFullYear(), '-')
@@ -182,6 +182,15 @@ if(form_simulador){
           iva : 19,
           tasa_aval : 3.7
       }
+
+      if (datos_formulario.monto) {
+          console.log("existe")
+          console.log(datos_formulario.monto)
+      } else {
+        console.log("no existe")
+      }
+
+
 
       if(datos_formulario.modo == 0){
             alert('Debes seleccionar un modo de pago')

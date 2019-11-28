@@ -59,15 +59,14 @@ function convertMoneda(numero) {
 }
 
 
-function validateForm(arrayInputs){
-    for (const input of arrayInputs) {
-        inputValue = input.value
-        inputName = input.getAttribute('data-name')
+function validarCampo(input) {
 
-        if (inputValue == '') {
-            alert("Debes completar el campo " + inputName)
-        }
-    }
+    if (input == "" || input <= 0) {
+        alert('Debe diligenciar el campo' + getAttribute('data-name'))
+        return false
+    } else {
+        console.log('Diligenciado')
+    } 
 }
 
 
