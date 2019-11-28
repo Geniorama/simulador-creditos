@@ -70,3 +70,15 @@ function validateForm(arrayInputs){
     }
 }
 
+
+function crearOpciones(numOpciones, contenedor) {
+    
+    let element = '<option selected>Selecciona una opción</option>';
+
+    for (let index = 0; index < numOpciones; index++) {
+        let num_opcion = index + 1
+        element += `<option value=${num_opcion}>${num_opcion}</option>`
+    }
+    contenedor.innerHTML = element;
+}
+
