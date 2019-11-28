@@ -40,8 +40,7 @@
 
         let tasa_int = Math.pow((1 + this.tasa), (1/12)) - 1
 
-        var  cuota_fija = calcCuotaFija(this.monto, this.tasa, this.cuotas)
-
+        var  cuota_fija = 0
         var items = new Array();
 
             for (var i=0; i < this.cuotas; i++) {
@@ -51,8 +50,10 @@
                 //Variación de interés por días de interés
                 if (numero == 1) {
                     interes = Math.round((saldo_inicial * this.tasa) / 30) * contdias;
+                    cuota_fija = calcCuotaFija(this.monto, (this.tasa * contdias) / 30, this.cuotas)
                 } else {
                     interes = Math.round(saldo_inicial  * this.tasa)
+                    cuota_fija = calcCuotaFija(this.monto, this.tasa, this.cuotas)
                 }
 
 
@@ -99,6 +100,11 @@
 
                 contador = contador + 1
 
+                if (contador == 1) {
+                    cuota_fija = calcCuotaFija(this.monto, (this.tasa * contdias) / 30, this.cuotas)
+                } else {
+                    cuota_fija = calcCuotaFija(this.monto, this.tasa, this.cuotas)
+                }
                 comision = Math.round((((cuota_fija + seguro_cuota + iva) / (1-((1*this.tasa_aval)/100)*(1+((1*this.iva)/100))))-(cuota_fija + seguro_cuota + iva)) / (1+((1*this.iva)/100)));
                 iva_19 = Math.round((comision*this.iva)/100);
                 itemsCuota = [cuota_fija, comision, iva_19, seguro_cuota, iva];
