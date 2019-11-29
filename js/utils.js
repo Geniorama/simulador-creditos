@@ -81,17 +81,8 @@ function crearOpciones(numOpciones, contenedor) {
     contenedor.innerHTML = element;
 }
 
-/*
-Cuota = (Monto * (%MV x (1 + %MV) ^ n)) / ((1 + %MV) ^ n) - 1)
-
-siendo: Monto (valor a ser prestado), n (numero de meses), %MV (Tasa Efectiva Mensual)
-
-%MV = (1 + %EA) ^ (1/12) - 1
-*/
-
-
 function calcCuotaFija(monto, tasa, cuotas) {
     let valor_cuota = Math.round(monto *( (tasa * Math.pow(1 + tasa, cuotas)) / (Math.pow(1 + tasa, cuotas) - 1) ));
 
     return valor_cuota
-  }
+}

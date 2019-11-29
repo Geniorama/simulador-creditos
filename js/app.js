@@ -59,7 +59,7 @@
 
                 let abono_al_capital = Math.round(cuota_fija - interes);
 
-                console.log(cuota_fija)
+
                 saldo_inicial -= Math.round(abono_al_capital);
                 let saldo_total = saldo_inicial + abono_al_capital;
 
