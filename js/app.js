@@ -52,7 +52,7 @@
                     interes = Math.round((saldo_inicial * this.tasa) / 30) * contdias;
                     cuota_fija = calcCuotaFija(this.monto, (this.tasa * contdias) / 30, this.cuotas)
                 } else {
-                    interes = Math.round(saldo_inicial  * this.tasa)
+                    interes = Math.round(saldo_inicial * this.tasa)
                     cuota_fija = calcCuotaFija(this.monto, this.tasa, this.cuotas)
                 }
 
