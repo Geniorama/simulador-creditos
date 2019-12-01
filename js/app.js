@@ -20,7 +20,7 @@
     
 
     calculate(){
-        const meses = new Array ("Ene.","Feb.","Mar.","Abr.","May.","Jun.","Jul.","Ago.","Sept.","Oct.","Nov.","Dic.");
+        
         var fecha_solicitud_simulador = this.fecha_solicitud
         var fecha = this.fecha
         var fecha_ini = new Date(fecha_solicitud_simulador)
@@ -150,7 +150,7 @@ if(form_simulador){
   //Fechas
   input_solicitud.addEventListener('change', function() {
 
-    if(this.value.value === ''){
+    if(this.value === ''){
             input_cuota_uno.readOnly = true
         } else {
             input_cuota_uno.readOnly = false

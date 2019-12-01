@@ -86,3 +86,5 @@ function calcCuotaFija(monto, tasa, cuotas) {
 
     return valor_cuota
 }
+
+const meses = new Array ("Ene.","Feb.","Mar.","Abr.","May.","Jun.","Jul.","Ago.","Sept.","Oct.","Nov.","Dic.");
