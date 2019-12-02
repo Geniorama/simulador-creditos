@@ -45,20 +45,16 @@
                 let numero = i + 1;
                 let interes = 0;
                 
-                
-
                 //Variación de interés por días de interés
                 if (numero == 1) {
                     interes = Math.round((saldo_inicial * this.tasa) / 30) * contdias;
                     cuota_fija = calcCuotaFija(this.monto, (this.tasa * contdias) / 30, this.cuotas)
 
-                    var k = cuota_fija - interes
+                    var k = Math.round(cuota_fija - interes)
                 } else {
                     interes = Math.round(saldo_inicial * this.tasa)
                     cuota_fija = calcCuotaFija((this.monto - k), this.tasa, (this.cuotas - 1))
                 } 
-
-                console.log(cuota_fija)
 
                 let abono_al_capital = Math.round(cuota_fija - interes);
 
