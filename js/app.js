@@ -47,14 +47,15 @@
                 
                 //Variación de interés por días de interés
                 if (numero == 1) {
-                    interes = Math.round((saldo_inicial * this.tasa) / 30) * contdias;
+                    interes = Math.round((this.monto * this.tasa) / 30) * contdias;
                     cuota_fija = calcCuotaFija(this.monto, (this.tasa * contdias) / 30, this.cuotas)
-
                     var k = Math.round(cuota_fija - interes)
-                } else {
+                } else if (contdias == 30 && numero > 1){
                     interes = Math.round(saldo_inicial * this.tasa)
+                    cuota_fija = calcCuotaFija(this.monto, (this.tasa * contdias) / 30, this.cuotas)
+                } else {
                     cuota_fija = calcCuotaFija((this.monto - k), this.tasa, (this.cuotas - 1))
-                } 
+                }
 
                 let abono_al_capital = Math.round(cuota_fija - interes);
 
@@ -100,14 +101,15 @@
 
                 if (contador == 1) {
                     cuota_fija = calcCuotaFija(this.monto, (this.tasa * contdias) / 30, this.cuotas)
+                } else if (contdias == 30 && contador > 1) {
+                    cuota_fija = calcCuotaFija(this.monto, (this.tasa * contdias) / 30, this.cuotas)
                 } else {
                     cuota_fija = calcCuotaFija((this.monto - k), this.tasa, (this.cuotas - 1))
                 }
 
                 comision = Math.round((((cuota_fija + seguro_cuota + iva) / (1-((1*this.tasa_aval)/100)*(1+((1*this.iva)/100))))-(cuota_fija + seguro_cuota + iva)) / (1+((1*this.iva)/100)));
                 iva_19 = Math.round((comision*this.iva)/100);
-                itemsCuota = [cuota_fija, comision, iva_19, seguro_cuota, iva];
-                var itemsCuota = [cuota_fija, comision, iva_19, seguro_cuota, iva];
+                let itemsCuota = [cuota_fija, comision, iva_19, seguro_cuota, iva];
                 total_cuota = sumaMultiple(itemsCuota);
 
                 iterator.cuota_fija = convertMoneda(total_cuota)
@@ -228,11 +230,6 @@ if(form_simulador){
                             <tr>
                                 <td>${valor.numero}</td>
                                 <td>${valor.fecha_pago}</td>
-                                <td>${valor.saldo_al_capital}</td> 
-                                <td>${valor.interes}</td>
-                                <td>${valor.abono_al_capital}</td>
-                                <td>${valor.comision}</td> 
-                                <td>${valor.seguro_cuota}</td> 
                                 <td>${valor.cuota_fija}</td>              
                             </tr>
                             `;
@@ -248,12 +245,19 @@ if(form_simulador){
                         var doc = new jsPDF('landscape');
                     
                         doc.setFontSize(12)
-                        doc.text(20, 20, 'SIMULADOR CRÉDITO EDUCATIVO');
+                        doc.text(20, 20, 'SIMULADOR CRÉDITO EDUCATIVO - FUNDACIONES MICHELSEN');
         
                         doc.setFontSize(9)
         
                         let fecha_actual = new Date();
                         fecha_actual = crearFecha(fecha_actual.getDate(), meses[fecha_actual.getMonth()], fecha_actual.getFullYear(), ' / ');
+
+
+                        let fecha_solic = datos_formulario.fecha_solicitud
+                        fecha_solic = fecha_solic.split('-')
+                        fecha_solic = new Date(fecha_solic[0], fecha_solic[1] - 1, fecha_solic[2])
+
+                        fecha_solic = crearFecha(fecha_solic.getDate(), meses[fecha_solic.getMonth()], fecha_solic.getFullYear(), ' / ');
         
                         if (datos_formulario.modo == 1) {
                             datos_formulario.modo = 'Pagaré'
@@ -267,25 +271,21 @@ if(form_simulador){
                             datos_formulario.programa = 'Postgrado'
                         }
         
-                        doc.text(20, 30, `Fecha de simulación: ${fecha_actual}`);
+                        doc.text(20, 30, `Fecha de solicitud: ${fecha_solic}`);
                         doc.text(20, 35, `Modo de pago: ${datos_formulario.modo}`);
                         doc.text(20, 40, `Tipo de programa: ${datos_formulario.programa}`);
                         doc.text(20, 45, `Valor solicitado: ${convertMoneda(datos_formulario.monto)}`);
                         doc.text(20, 50, `Plazo: ${datos_formulario.cuotas} meses`);
         
+                        doc.text(210, 30, `Fecha de simulación: ${fecha_actual}`);
                         //Encabezados tabla
-                        doc.line(20, 56, 250, 56); 
+                        doc.line(20, 56, 100, 56); 
         
                         doc.text(20, 62, 'No. Cuota');
                         doc.text(40, 62, 'Fecha pago');
-                        doc.text(80, 62, 'Saldo');
-                        doc.text(110, 62, 'Intereses');
-                        doc.text(140, 62, 'Abono al capital');
-                        doc.text(170, 62, 'Comisión');
-                        doc.text(200, 62, 'Seguro');
-                        doc.text(230, 62, 'Valor cuota');
+                        doc.text(80, 62, 'Valor cuota');
         
-                        doc.line(20, 65, 250, 65);
+                        doc.line(20, 65, 100, 65);
         
                         var numero_inicial_fila = 65
         
@@ -293,14 +293,16 @@ if(form_simulador){
                             numero_inicial_fila = numero_inicial_fila + 10
                             doc.text(20, numero_inicial_fila, `${item.numero}`)
                             doc.text(40, numero_inicial_fila, `${item.fecha_pago}`)
-                            doc.text(80, numero_inicial_fila, `${item.saldo_al_capital}`)
-                            doc.text(110, numero_inicial_fila, `${item.interes}`)
-                            doc.text(140, numero_inicial_fila, `${item.abono_al_capital}`)
-                            doc.text(170, numero_inicial_fila, `${item.comision}`)
-                            doc.text(200, numero_inicial_fila, `${item.seguro_cuota}`)
-                            doc.text(230, numero_inicial_fila, `${item.cuota_fija}`)
+                            doc.text(80, numero_inicial_fila, `${item.cuota_fija}`)
                         }
-        
+
+                        doc.setFontSize(10)
+                        doc.text(20, 120, `IMPORTANTE`);
+
+                        doc.setFontSize(7)
+                        doc.text(20, 130, `1. El valor real de la primera cuota del crédito puede variar del proyectado en esta consulta por motivos de ajuste de los intereses entre la fecha de contabilización del crédito y la fecha de la primera facturación.`);
+
+                        doc.text(20, 136, `2. La fecha de solicitud seleccionada en el formulario se usa para efectos de la simulación, contrario a la fecha de simulación, que corresponde a la fecha de generación de este documento`);
         
                         //Guardar pdf
                         doc.save('Simulación Crédito - Fund. Michelsen.pdf')
