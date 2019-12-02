@@ -82,7 +82,11 @@ function crearOpciones(numOpciones, contenedor) {
 }
 
 function calcCuotaFija(monto, tasa, cuotas) {
-    let valor_cuota = Math.round(monto *( (tasa * Math.pow(1 + tasa, cuotas)) / (Math.pow(1 + tasa, cuotas) - 1) ));
+    //let valor_cuota = monto*((tasa * Math.pow(1 + tasa, cuotas)) / (Math.pow(1 + tasa, cuotas) - 1));
+
+    //Es igual a
+    let valor_cuota = (tasa * monto) / (1 - Math.pow((1 + tasa), -cuotas))
+    valor_cuota = Math.round(valor_cuota)
 
     return valor_cuota
 }
