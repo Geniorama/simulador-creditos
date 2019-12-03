@@ -238,7 +238,17 @@ if(form_simulador){
                                 label_value.innerHTML = valor.cuota_fija
                             }
                     }  
+
+                    //Url Get
+                    function urlGet(url, button) {
+                        url_get = `${url}?modo-pago=${datos_formulario.modo}&tipo-programa=${datos_formulario.programa}&valor=${datos_formulario.monto}&cuotas=${datos_formulario.cuotas}&fecha-solicitud=${datos_formulario.fecha_solicitud}&fecha-cuota-uno=${datos_formulario.fecha_pick}`
+                        button.setAttribute('href', url_get)
+                    }
         
+                    const button_form_send = document.getElementById('button-form-send')
+                    
+                    urlGet('http://univercity.com.co/demo/michelsen/credito-educativo/formulario/', button_form_send)
+
                     const botonPDF = document.querySelector('#button-pdf')
                     botonPDF.addEventListener('click', function(e) {
                         e.preventDefault()
@@ -296,14 +306,14 @@ if(form_simulador){
                             doc.text(80, numero_inicial_fila, `${item.cuota_fija}`)
                         }
 
-                        doc.setFontSize(10)
+                        /*doc.setFontSize(10)
                         doc.text(20, 120, `IMPORTANTE`);
 
                         doc.setFontSize(7)
                         doc.text(20, 130, `1. El valor real de la primera cuota del crédito puede variar del proyectado en esta consulta por motivos de ajuste de los intereses entre la fecha de contabilización del crédito y la fecha de la primera facturación.`);
 
                         doc.text(20, 136, `2. La fecha de solicitud seleccionada en el formulario se usa para efectos de la simulación, contrario a la fecha de simulación, que corresponde a la fecha de generación de este documento`);
-        
+                        */
                         //Guardar pdf
                         doc.save('Simulación Crédito - Fund. Michelsen.pdf')
                     })
