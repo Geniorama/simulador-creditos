@@ -6,6 +6,7 @@
         this.cuotas = arreglo_datos.cuotas;
         this.fecha_solicitud = arreglo_datos.fecha_solicitud;
         this.fecha = arreglo_datos.fecha_pick;
+        this.cont_dias = arreglo_datos.cont_dias;
         this.modo = arreglo_datos.modo;
         this.programa = arreglo_datos.programa;
         this.tasa = arreglo_datos.tasa;
@@ -20,13 +21,9 @@
     
 
     calculate(){
-        
-        var fecha_solicitud_simulador = this.fecha_solicitud
+
         var fecha = this.fecha
-        var fecha_ini = new Date(fecha_solicitud_simulador)
-        var fecha_fin = new Date(fecha)
-        var dif_fechas = fecha_fin.getTime() - fecha_ini.getTime()
-        var contdias = Math.round(dif_fechas/(1000*60*60*24));
+        var contdias = this.cont_dias
         var fecha = fecha.split('-')
         fecha = new Date(fecha[0], fecha[1] - 1, fecha[2])
         var estudio = 0
@@ -41,19 +38,22 @@
         var  cuota_fija = 0
         var items = new Array();
 
+
             for (var i=0; i < this.cuotas; i++) {
                 let numero = i + 1;
                 let interes = 0;
                 
                 //Variación de interés por días de interés
                 if (numero == 1) {
-                    interes = Math.round((this.monto * this.tasa) / 30) * contdias;
-                    cuota_fija = calcCuotaFija(this.monto, (this.tasa * contdias) / 30, this.cuotas)
+                    
+                   // interes = Math.round((this.monto * this.tasa) / 30) * contdias;
+                    interes = ((this.monto * this.tasa) / 30) * contdias
+                    interes = Math.round(interes)
+
+                    cuota_fija = calcCuotaFija(this.monto, (Math.pow((1+this.tasa), (contdias/30)))-1, this.cuotas)
                     var k = Math.round(cuota_fija - interes)
-                } else if (contdias == 30 && numero > 1){
-                    interes = Math.round(saldo_inicial * this.tasa)
-                    cuota_fija = calcCuotaFija(this.monto, (this.tasa * contdias) / 30, this.cuotas)
                 } else {
+                    interes = Math.round(saldo_inicial * this.tasa)
                     cuota_fija = calcCuotaFija((this.monto - k), this.tasa, (this.cuotas - 1))
                 }
 
@@ -100,9 +100,8 @@
                 contador = contador + 1
 
                 if (contador == 1) {
-                    cuota_fija = calcCuotaFija(this.monto, (this.tasa * contdias) / 30, this.cuotas)
-                } else if (contdias == 30 && contador > 1) {
-                    cuota_fija = calcCuotaFija(this.monto, (this.tasa * contdias) / 30, this.cuotas)
+                    cuota_fija = calcCuotaFija(this.monto, (Math.pow((1+this.tasa), (contdias/30)))-1, this.cuotas)
+                    
                 } else {
                     cuota_fija = calcCuotaFija((this.monto - k), this.tasa, (this.cuotas - 1))
                 }
@@ -115,7 +114,7 @@
                 iterator.cuota_fija = convertMoneda(total_cuota)
                 iterator.seguro_cuota = convertMoneda(seguro_cuota) 
                 iterator.comision = convertMoneda(comision)
-            }
+            } 
 
         return items;
 
@@ -195,15 +194,24 @@ if(form_simulador){
                return false
           } else {
             if(contador == inputsForm.length){
-                    let datos = new FormData(form_simulador);
+                    
+                    //Campos
+                    function getValueInput(field) {
+                        const fieldName = document.getElementById(field)
+                        let fieldVal =  fieldName.value
+                        return fieldVal
+                    }
 
+                    const dif_dias = createDate360('fecha-solicitud', 'fecha-cuota-uno')
+                    
                     var datos_formulario = {
-                        monto  : parseInt(datos.get('valor')),
-                        cuotas : parseInt(datos.get('cuotas')),
-                        fecha_solicitud : datos.get('fecha-solicitud'),
-                        fecha_pick  : datos.get('fecha-cuota-uno'),
-                        modo   : datos.get('modo-pago'),
-                        programa : datos.get('tipo-programa'),
+                        monto  : parseInt(getValueInput('valor')),
+                        cuotas : parseInt(getValueInput('cuotas')),
+                        fecha_solicitud : getValueInput('fecha-solicitud'),
+                        fecha_pick  : getValueInput('fecha-cuota-uno'),
+                        cont_dias : dif_dias,
+                        modo   : getValueInput('modo-pago'),
+                        programa : getValueInput('tipo-programa'),
                         tasa : 0.014,
                         seguro : 0.028,
                         recaudo : 2100,

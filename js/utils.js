@@ -1,5 +1,7 @@
 /*============== FUNCIONES AUXILIARES ===================*/
 
+const meses = new Array ("Ene.","Feb.","Mar.","Abr.","May.","Jun.","Jul.","Ago.","Sept.","Oct.","Nov.","Dic.");
+
 function sumarDias(fecha, dias){
     fecha.setDate(fecha.getDate() + dias);
     return fecha;
@@ -11,8 +13,8 @@ function sumarMeses(fecha, num_meses){
 }
 
 function crearFecha(dia, mes, agno, separador) {
-    var dia = dia.toString();
-    var mes = mes.toString();
+    var dia = String(dia);
+    var mes = String(mes);
   
     if (dia.length <= 1) {
         dia = '0' + dia;
@@ -25,9 +27,9 @@ function crearFecha(dia, mes, agno, separador) {
 
 
 function crearFechaMinMax(dia, mes, agno, separador) {
-    dia = dia.toString();
+    dia = String(dia);
     mes = mes + 1
-    mes = mes.toString();
+    mes = String(mes);
   
     if (dia.length <= 1) {
         dia = '0' + dia;
@@ -91,4 +93,41 @@ function calcCuotaFija(monto, tasa, cuotas) {
     return valor_cuota
 }
 
-const meses = new Array ("Ene.","Feb.","Mar.","Abr.","May.","Jun.","Jul.","Ago.","Sept.","Oct.","Nov.","Dic.");
+
+function createDate360(dateInit, dateFinish) {
+
+    let date_init = document.getElementById(dateInit).value
+    let date_finish = document.getElementById(dateFinish).value
+
+    let dias = 0
+
+    date_init = date_init.split('-')
+    
+    let date_init_year = parseInt(date_init[0]),
+        date_init_month = parseInt(date_init[1]),
+        date_init_day = parseInt(date_init[2])
+
+    date_finish = date_finish.split('-')
+    
+    let date_finish_year = parseInt(date_finish[0]),
+        date_finish_month = parseInt(date_finish[1]),
+        date_finish_day = parseInt(date_finish[2])
+
+    if (date_finish_day < date_init_day) {
+
+        date_finish_day = date_finish_day + 30
+        date_finish_month = date_finish_month - 1
+    }
+
+    if (date_finish_month < date_init_month) {
+        date_finish_month = date_finish_month + 12
+        date_finish_year = date_finish_year -1
+    }
+    //console.log(date_finish_day)
+
+
+    dias = ((date_finish_day + 1) - (date_init_day)) + (((date_finish_month) - (date_init_month)) * 30) + ((date_finish_year - date_init_year) * 360)
+
+    return dias - 1
+}
+
