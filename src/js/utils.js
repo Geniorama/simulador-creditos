@@ -1,15 +1,17 @@
 /*============== FUNCIONES AUXILIARES ===================*/
 
-const meses = new Array ("Ene.","Feb.","Mar.","Abr.","May.","Jun.","Jul.","Ago.","Sept.","Oct.","Nov.","Dic.");
+const meses = ["Ene.","Feb.","Mar.","Abr.","May.","Jun.","Jul.","Ago.","Sept.","Oct.","Nov.","Dic."];
 
 function sumarDias(fecha, dias){
-    fecha.setDate(fecha.getDate() + dias);
-    return fecha;
+    
+    let fechaSuma = fecha.setDate(fecha.getDate() + dias);
+    return fechaSuma;
 }
 
 function sumarMeses(fecha, num_meses){
     fecha.setMonth(fecha.getMonth() + num_meses);
-    return fecha;
+    let fechaSuma
+    return fechaSuma;
 }
 
 function crearFecha(dia, mes, agno, separador) {
@@ -27,23 +29,23 @@ function crearFecha(dia, mes, agno, separador) {
 
 
 function crearFechaMinMax(dia, mes, agno, separador) {
-    dia = String(dia);
-    mes = mes + 1
-    mes = String(mes);
+    let diaNuevo = String(dia);
+    let mesNuevo = mes + 1;
+    mesNuevo = String(mesNuevo);
   
-    if (dia.length <= 1) {
-        dia = '0' + dia;
-    } else if (mes.length <= 1){
-        mes = '0' + mes;
+    if (diaNuevo.length <= 1) {
+        diaNuevo = '0' + diaNuevo;
+    } else if (mesNuevo.length <= 1){
+        mesNuevo = '0' + mesNuevo;
     }
 
-    fecha = agno.toString() + separador + mes + separador + dia;
+    let fechaNueva = agno.toString() + separador + mesNuevo + separador + diaNuevo;
     
-    return fecha;
+    return fechaNueva;
 }
 
 function sumaMultiple(arreglo){
-    var suma = 0;
+    let suma = 0;
 
     for (let numero of arreglo) {
         numero = parseInt(numero);
@@ -54,10 +56,10 @@ function sumaMultiple(arreglo){
 }
 
 function convertMoneda(numero) {
-    numero = new Intl.NumberFormat('es-CO').format(numero)
-    numero = '$'+numero
+    let numeroMoneda = new Intl.NumberFormat('es-CO').format(numero)
+    numeroMoneda = '$'+numeroMoneda
 
-    return numero
+    return numeroMoneda;
 }
 
 
@@ -131,3 +133,4 @@ function createDate360(dateInit, dateFinish) {
     return dias - 1
 }
 
+export {meses};

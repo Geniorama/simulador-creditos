@@ -1,3 +1,5 @@
+ 
+ 
  //Simulador
 
  class Simulator {
@@ -22,22 +24,21 @@
 
     calculate(){
 
-        var fecha = this.fecha
-        var contdias = this.cont_dias
-        var fecha = fecha.split('-')
+        let fecha = this.fecha
+        let contdias = this.cont_dias
+        fecha = fecha.split('-')
         fecha = new Date(fecha[0], fecha[1] - 1, fecha[2])
-        var estudio = 0
-        var seguro_cuota = 0
-        var iva = 0
-        var comision = 0
-        var iva_19 = 0
-        var suma_seguro_cuota = 0
-        var total_cuota = 0
-        var saldo_inicial = this.monto
+        let estudio = 0
+        let seguro_cuota = 0
+        let iva = 0
+        let comision = 0
+        let iva_19 = 0
+        let suma_seguro_cuota = 0
+        let total_cuota = 0
+        let saldo_inicial = this.monto
 
-        var  cuota_fija = 0
-        var items = new Array();
-
+        let cuota_fija = 0
+        let items = new Array();
 
             for (var i=0; i < this.cuotas; i++) {
                 let numero = i + 1;
@@ -143,7 +144,7 @@ if(form_simulador){
   
 
   let get_fecha_actual = new Date();
-  fecha_actual_selec = crearFechaMinMax(get_fecha_actual.getDate(), get_fecha_actual.getMonth(), get_fecha_actual.getFullYear(), '-');
+  let fecha_actual_selec = crearFechaMinMax(get_fecha_actual.getDate(), get_fecha_actual.getMonth(), get_fecha_actual.getFullYear(), '-');
   input_solicitud.setAttribute('min', fecha_actual_selec)
   input_cuota_uno.readOnly = true
   
@@ -179,15 +180,15 @@ if(form_simulador){
   form_simulador.addEventListener('submit', function(e) {
       e.preventDefault();
 
-      inputsForm = [input_modo_pago, input_tipo_programa, input_monto, input_cuotas,  input_solicitud, input_cuota_uno]
+      let inputsForm = [input_modo_pago, input_tipo_programa, input_monto, input_cuotas,  input_solicitud, input_cuota_uno]
 
       var contador = 0
 
       for (const input_obj of inputsForm) {
-          input_name = input_obj.getAttribute('data-name')
-          input_value = input_obj.value
+          let input_name = input_obj.getAttribute('data-name')
+          let input_value = input_obj.value
 
-          contador = contador + 1
+          let contador = contador + 1
           
           if (input_value == 0 || input_value == "undefined" || input_value == "" || input_value == null) {
                alert("El campo " + input_name + " está vacío")
