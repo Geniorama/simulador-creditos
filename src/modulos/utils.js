@@ -121,3 +121,13 @@ export const createDate360 = (dateInit, dateFinish) => {
 
     return dias - 1;
 }
+
+export const es_bisiesto = year => {
+    if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
+        let resultado = true;
+        return resultado;
+    } else {
+        let resultado = false;
+        return resultado;
+    }  
+}

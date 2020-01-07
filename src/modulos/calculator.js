@@ -1,4 +1,4 @@
-import {meses, sumarDias, sumarMeses, crearFecha, crearFechaMinMax, sumaMultiple, convertMoneda, validarCampo, crearOpciones, calcCuotaFija, createDate360} from './utils'; 
+import {meses, sumarDias, sumarMeses, crearFecha, crearFechaMinMax, sumaMultiple, convertMoneda, validarCampo, crearOpciones, calcCuotaFija, createDate360, es_bisiesto} from './utils'; 
  //Simulador
 
  class Simulator {
@@ -25,8 +25,14 @@ import {meses, sumarDias, sumarMeses, crearFecha, crearFechaMinMax, sumaMultiple
 
         let fecha = this.fecha
         let contdias = this.cont_dias
-        fecha = fecha.split('-')
+
+        
+        fecha = fecha.split('-');
+        let agnio_fecha = fecha[0];
+        let res_bisiesto = es_bisiesto(agnio_fecha);
+        console.log(res_bisiesto);
         fecha = new Date(fecha[0], fecha[1] - 1, fecha[2])
+        
         let estudio = 0
         let seguro_cuota = 0
         let iva = 0

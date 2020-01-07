@@ -1,8 +1,10 @@
 import moment from 'moment';
-import {crearOpciones, createDate360, crearFecha, meses, convertMoneda} from './modulos/utils';
+import {crearOpciones, createDate360, convertMoneda} from './modulos/utils';
 import Simulator from './modulos/calculator';
 
 /*============== FUNCIONES FORMULARIO ===================*/
+
+
 
 const form_simulador = document.getElementById('simulator')
 
@@ -156,8 +158,8 @@ if (form_simulador) {
                         let fecha_solic = datos_formulario.fecha_solicitud;
                         fecha_solic = fecha_solic.split('-')
                         fecha_solic = new Date(fecha_solic[0], fecha_solic[1] - 1, fecha_solic[2])
-
-                        fecha_solic = crearFecha(fecha_solic.getDate(), meses[fecha_solic.getMonth()], fecha_solic.getFullYear(), ' / ');
+                        fecha_solic = moment(fecha_solic);
+                        fecha_solic = fecha_solic.format('YYYY-MM-DD');
         
                         if (datos_formulario.modo == 1) {
                             datos_formulario.modo = 'Pagaré'
