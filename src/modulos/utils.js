@@ -1,45 +1,3 @@
-export const meses = ["Ene.","Feb.","Mar.","Abr.","May.","Jun.","Jul.","Ago.","Sept.","Oct.","Nov.","Dic."];
-
-export const sumarDias = (fecha, dias) => {
-    let resultado = fecha.setDate(fecha.getDate() + dias);
-    return resultado;
-}
-
-export const sumarMeses = (fecha, num_meses) => {
-    let resultado = fecha.setMonth(fecha.getMonth() + num_meses);
-    return resultado;
-}
-
-export const crearFecha = (dia, mes, agno, separador) => {
-    let diaFecha = String(dia);
-    let mesFecha = String(mes);
-    let agnoFecha = String(agno);
-  
-    if (diaFecha.length <= 1) {
-        diaFecha = '0' + diaFecha;
-    }
-
-    let fecha = diaFecha + separador + mesFecha + separador + agnoFecha;
-    
-    return fecha;
-}
-
-export const crearFechaMinMax = (dia, mes, agno, separador) => {
-    let diaFecha = String(dia);
-    let mesFecha = String(mes + 1);
-    let agnoFecha = String(agno);
-  
-    if (diaFecha.length <= 1) {
-        diaFecha = '0' + diaFecha;
-    } else if (mesFecha.length <= 1){
-        mesFecha = '0' + mesFecha;
-    }
-
-    let fecha = agnoFecha + separador + mesFecha + separador + diaFecha;
-    
-    return fecha;
-}
-
 export const sumaMultiple = arreglo => {
     let suma = 0;
 
@@ -47,7 +5,6 @@ export const sumaMultiple = arreglo => {
         numero = parseInt(numero);
         suma = suma + numero;
     }
-
     return suma;
 }
 
@@ -114,20 +71,36 @@ export const createDate360 = (dateInit, dateFinish) => {
         date_finish_month = date_finish_month + 12;
         date_finish_year = date_finish_year -1;
     }
-    //console.log(date_finish_day)
-
 
     dias = ((date_finish_day + 1) - (date_init_day)) + (((date_finish_month) - (date_init_month)) * 30) + ((date_finish_year - date_init_year) * 360);
 
     return dias - 1;
 }
 
-export const es_bisiesto = year => {
-    if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
-        let resultado = true;
-        return resultado;
-    } else {
-        let resultado = false;
-        return resultado;
-    }  
+export const separarMiles = input => {
+    let input_monto = document.getElementById(input);
+
+    input_monto.addEventListener('keyup', (e) => {
+        let entrada = e.target.value.split('.').join('');
+        entrada = entrada.split('').reverse();
+
+        let salida = [];
+        let aux = '';
+        
+        let paginador = Math.ceil(entrada.length / 3);
+
+        for (let i = 0; i < paginador; i++) {
+            for (let j = 0; j < 3; j++) {
+               if(entrada[j + (i*3)] != undefined){
+                    aux += entrada[j + (i*3)];
+               }    
+            }
+            salida.push(aux);
+            aux = '';
+
+            e.target.value = salida.join('.').split("").reverse().join("");
+            
+        }
+        
+    })
 }

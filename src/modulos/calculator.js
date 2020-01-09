@@ -1,5 +1,8 @@
-import {meses, sumarDias, sumarMeses, crearFecha, crearFechaMinMax, sumaMultiple, convertMoneda, validarCampo, crearOpciones, calcCuotaFija, createDate360, es_bisiesto} from './utils'; 
+import moment from 'moment';
+import {sumaMultiple, convertMoneda, calcCuotaFija} from './utils'; 
  //Simulador
+
+ moment.locale('es');
 
  class Simulator {
     constructor(arreglo_datos){
@@ -19,18 +22,11 @@ import {meses, sumarDias, sumarMeses, crearFecha, crearFechaMinMax, sumaMultiple
         this.tasa_aval = arreglo_datos.tasa_aval;
     }
 
-    
-
     calculate(){
 
         let fecha = this.fecha
         let contdias = this.cont_dias
-
-        
         fecha = fecha.split('-');
-        let agnio_fecha = fecha[0];
-        let res_bisiesto = es_bisiesto(agnio_fecha);
-        console.log(res_bisiesto);
         fecha = new Date(fecha[0], fecha[1] - 1, fecha[2])
         
         let estudio = 0
@@ -58,9 +54,12 @@ import {meses, sumarDias, sumarMeses, crearFecha, crearFechaMinMax, sumaMultiple
 
                     cuota_fija = calcCuotaFija(this.monto, (Math.pow((1+this.tasa), (contdias/30)))-1, this.cuotas)
                     var k = Math.round(cuota_fija - interes)
+                    fecha = fecha;
+                    
                 } else {
                     interes = Math.round(saldo_inicial * this.tasa)
                     cuota_fija = calcCuotaFija((this.monto - k), this.tasa, (this.cuotas - 1))
+                    fecha = moment(fecha).add(1, 'M');
                 }
 
                 let abono_al_capital = Math.round(cuota_fija - interes);
@@ -68,9 +67,7 @@ import {meses, sumarDias, sumarMeses, crearFecha, crearFechaMinMax, sumaMultiple
                 saldo_inicial -= Math.round(abono_al_capital);
                 let saldo_total = saldo_inicial + abono_al_capital;
 
-                let fecha_pagos = crearFecha(fecha.getDate(), meses[fecha.getMonth()], fecha.getFullYear(), ' / ');
-
-                sumarMeses(fecha, 1);
+                let fecha_pagos = moment(fecha).format("MMM / DD / YYYY");
 
                 let pago_seguro = Math.round((saldo_total * this.seguro) / 100);
 
