@@ -8,6 +8,31 @@ export const sumaMultiple = arreglo => {
     return suma;
 }
 
+export const valorMinimo = valor =>{
+    if (valor < 500000) {
+        return false;
+    }
+}
+
+export const mostrarError = (modal, texto) => {
+    let modalWindow = document.getElementById(modal);
+    modalWindow.innerHTML = `
+        <div class="modal-card alert alert-danger p-5">
+            <i class="fa fa-times float-right" aria-hidden="true"></i>
+            <h3 class="text-center">¡ERROR!</h3>
+            <hr>
+            <p>${texto}</p>
+        </div>
+    `;
+
+    modalWindow.classList.add('show-modal')
+
+    let buttonClose = modalWindow.querySelector('.fa-times');
+    buttonClose.addEventListener('click', function() {
+        modalWindow.classList.remove('show-modal');
+    })
+}
+
 export const convertMoneda = numero => {
     let numeroMoneda = new Intl.NumberFormat('es-CO').format(numero);
     numeroMoneda = '$'+ numeroMoneda;
@@ -32,6 +57,11 @@ export const crearOpciones = (numOpciones, contenedor) => {
         element += `<option value=${num_opcion}>${num_opcion}</option>`;
     }
     contenedor.innerHTML = element;
+
+    let contenedorCuotas = document.getElementById('cuotas');
+
+    contenedorCuotas.options['1'].disabled = true;
+    contenedorCuotas.options['2'].disabled = true;
 }
 
 export const calcCuotaFija = (monto, tasa, cuotas) => {

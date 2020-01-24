@@ -1,5 +1,5 @@
 import moment from 'moment';
-import {crearOpciones, createDate360, convertMoneda, separarMiles} from './modulos/utils';
+import {crearOpciones, createDate360, convertMoneda, separarMiles, valorMinimo, mostrarError} from './modulos/utils';
 import Simulator from './modulos/calculator';
 
 /*============== FUNCIONES FORMULARIO ===================*/
@@ -89,7 +89,10 @@ const simularCredito = input => {
                 contador = contador + 1
                 
                 if (input_value == 0 || input_value == "undefined" || input_value == "" || input_value == null) {
-                    alert("El campo " + input_name + " está vacío")
+                    mostrarError('modal-errors', `El campo ${input_name} está vacío`);
+                    return false
+                } else if(valor_monto < 500000){
+                    mostrarError('modal-errors', 'Debes ingresar un valor superior a $500.000');
                     return false
                 } else {
                 if(contador == inputsForm.length){

@@ -5,10 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Pruebas</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="src/css/style.css">
 </head>
 <body>
+    <div class="modal-window flex-column justify-content-center align-items-center" id="modal-errors"></div>
+
     <div class="container">
         <div class="row">
             <div class="col-12 col-md-6">
@@ -37,19 +40,25 @@
                         <div class="form-group">
                             <label for="valor">Valor solicitado</label>
                             <input type="text" class="form-control" id="valor" name="valor" data-title="Valor solicitado">
+                            <small id="valorHelpBlock" class="form-text text-muted">
+                                El monto mínimo que puedes solicitar es de $500.000
+                            </small>
                         </div>
 
                         <div class="form-group">
                             <label for="cuotas">Cuotas</label>
                             <select class="custom-select" id="cuotas" name="cuotas" data-title="Cuotas" >
                                 <option selected value="0">Selecciona una opción</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
+                                <option value="1" disabled>1</option>
+                                <option value="2" disabled>2</option>
                                 <option value="3">3</option>
                                 <option value="4">4</option>
                                 <option value="5">5</option>
                                 <option value="6">6</option>
                             </select>
+                            <small id="cuotasHelpBlock" class="form-text text-muted">
+                                No puedes seleccionar menos de 3 cuotas
+                            </small>
                         </div>
 
                         <div class="form-group">
