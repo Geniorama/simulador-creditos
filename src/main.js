@@ -45,7 +45,7 @@ const simularCredito = input => {
             } else {
                 input_cuota_uno.readOnly = false;
                 let fecha_min_pago_uno = this.value;
-                fecha_min_pago_uno = moment( fecha_min_pago_uno).add(1, 'd');
+                fecha_min_pago_uno = moment( fecha_min_pago_uno).add(30, 'd');
                 input_cuota_uno.setAttribute('min', fecha_min_pago_uno.format('YYYY-MM-DD'));
                 let fecha_solicitud = this.value.split('-');
                 let mes_fecha_solicitud = parseInt(fecha_solicitud[1]) - 1;
