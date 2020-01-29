@@ -1,5 +1,5 @@
 import moment from 'moment';
-import {crearOpciones, createDate360, convertMoneda, separarMiles, valorMinimo, mostrarError} from './modulos/utils';
+import {crearOpciones, createDate360, convertMoneda, separarMiles, calcularFechas, mostrarError} from './modulos/utils';
 import Simulator from './modulos/calculator';
 
 /*============== FUNCIONES FORMULARIO ===================*/
@@ -20,10 +20,6 @@ const simularCredito = input => {
     
         separarMiles('valor');
     
-        
-    
-        
-    
         //Contenedores
         const cont_res = document.getElementById('res')
         const label_value = document.querySelector('.text-large')
@@ -31,7 +27,9 @@ const simularCredito = input => {
     
     
         //Fechas
-        let fecha_actual = moment();
+
+        calcularFechas('fecha-solicitud', 'fecha-cuota-uno', 30, 60)
+        /*let fecha_actual = moment();
         let date_obj = new Date(fecha_actual);
         let moment_obj = moment(date_obj);
         let fecha_min_limit = moment_obj.format('YYYY-MM-DD');
@@ -58,7 +56,7 @@ const simularCredito = input => {
                 fecha_max_limit = fecha_max_limit.format('YYYY-MM-DD');
                 input_cuota_uno.setAttribute('max', fecha_max_limit);
             }
-        })
+        })*/
     
         //Tipo programa
         input_tipo_programa.addEventListener('change', function() {
