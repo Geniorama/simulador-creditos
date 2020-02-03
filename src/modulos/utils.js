@@ -138,7 +138,7 @@ export const separarMiles = input => {
 }
 
 
-export const calcularFechas = (inputSolicitud, inputPrimeraCuota, diasDiff, diasPlazo) => {
+export const calcularFechas = (inputSolicitud, inputPrimeraCuota, mesDiff, mesesPlazo) => {
         let input_solicitud = document.getElementById(inputSolicitud);
         let input_cuota_uno = document.getElementById(inputPrimeraCuota);
 
@@ -156,14 +156,14 @@ export const calcularFechas = (inputSolicitud, inputPrimeraCuota, diasDiff, dias
             } else {
                 input_cuota_uno.readOnly = false;
                 let fecha_min_pago_uno = this.value;
-                fecha_min_pago_uno = moment( fecha_min_pago_uno).add(diasDiff, 'd');
+                fecha_min_pago_uno = moment( fecha_min_pago_uno).add(mesDiff, 'M');
                 input_cuota_uno.setAttribute('min', fecha_min_pago_uno.format('YYYY-MM-DD'));
                 let fecha_solicitud = this.value.split('-');
                 let mes_fecha_solicitud = parseInt(fecha_solicitud[1]) - 1;
                 fecha_solicitud[1] = String(mes_fecha_solicitud);
                 fecha_solicitud = moment(fecha_solicitud);
                 
-                let fecha_max_limit = fecha_solicitud.add(diasPlazo, 'days');
+                let fecha_max_limit = fecha_solicitud.add(mesesPlazo, 'M');
                 fecha_max_limit = new Date(fecha_max_limit);
                 fecha_max_limit = moment(fecha_max_limit);
                 fecha_max_limit = fecha_max_limit.format('YYYY-MM-DD');

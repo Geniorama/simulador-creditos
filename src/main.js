@@ -28,35 +28,7 @@ const simularCredito = input => {
     
         //Fechas
 
-        calcularFechas('fecha-solicitud', 'fecha-cuota-uno', 30, 60)
-        /*let fecha_actual = moment();
-        let date_obj = new Date(fecha_actual);
-        let moment_obj = moment(date_obj);
-        let fecha_min_limit = moment_obj.format('YYYY-MM-DD');
-    
-        input_solicitud.setAttribute('min', fecha_min_limit);
-        input_cuota_uno.readOnly = true;
-    
-        input_solicitud.addEventListener('change', function() {
-            if (this.value === '') {
-                input_cuota_uno.readOnly = true;
-            } else {
-                input_cuota_uno.readOnly = false;
-                let fecha_min_pago_uno = this.value;
-                fecha_min_pago_uno = moment( fecha_min_pago_uno).add(30, 'd');
-                input_cuota_uno.setAttribute('min', fecha_min_pago_uno.format('YYYY-MM-DD'));
-                let fecha_solicitud = this.value.split('-');
-                let mes_fecha_solicitud = parseInt(fecha_solicitud[1]) - 1;
-                fecha_solicitud[1] = String(mes_fecha_solicitud);
-                fecha_solicitud = moment(fecha_solicitud);
-                
-                let fecha_max_limit = fecha_solicitud.add(60, 'days');
-                fecha_max_limit = new Date(fecha_max_limit);
-                fecha_max_limit = moment(fecha_max_limit);
-                fecha_max_limit = fecha_max_limit.format('YYYY-MM-DD');
-                input_cuota_uno.setAttribute('max', fecha_max_limit);
-            }
-        })*/
+        calcularFechas('fecha-solicitud', 'fecha-cuota-uno', 1, 2)
     
         //Tipo programa
         input_tipo_programa.addEventListener('change', function() {
