@@ -42,14 +42,7 @@ export const convertMoneda = numero => {
     return numeroMoneda;
 }
 
-export const validarCampo = input => {
-    if (input == "" || input <= 0) {
-        alert('Debe diligenciar el campo' + input.getAttribute('data-name'))
-        return false
-    } else {
-        console.log('Diligenciado')
-    }
-}
+
 
 export const crearOpciones = (numOpciones, contenedor) => {
     let element = '<option selected>Selecciona una opción</option>';
