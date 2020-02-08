@@ -145,7 +145,7 @@ const simularCredito = input => {
                             fecha_solic = moment(fecha_solic);
                             fecha_solic = moment(fecha_solic).format("MMM / DD / YYYY");
     
-                            let fecha_simulacion = moment(fecha_min_limit).format("MMM / DD / YYYY");
+                            let fecha_simulacion = moment().format("MMM / DD / YYYY");
             
                             if (datos_formulario.modo == 1) {
                                 datos_formulario.modo = 'Pagaré'
