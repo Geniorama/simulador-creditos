@@ -13,6 +13,6 @@
     "build-babel": "babel src/js -d src/output --watch"
   },
   "dependencies": {
-    "moment": "^2.24.0"
+    "moment": "^2.29.4"
   }
 }
